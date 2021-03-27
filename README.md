@@ -121,3 +121,90 @@ $ kubectl get all
 NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
 service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   102m
 ```
+
+
+```
+$ kubectl create deployment test-nginx --image=nginx
+deployment.apps/test-nginx created
+
+$ kubectl get all
+NAME                             READY   STATUS    RESTARTS   AGE
+pod/test-nginx-59ffd87f5-9tcrx   1/1     Running   0          11s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   157m
+
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/test-nginx   1/1     1            1           11s
+
+NAME                                   DESIRED   CURRENT   READY   AGE
+replicaset.apps/test-nginx-59ffd87f5   1         1         1       11s
+
+$ kubectl expose deployment test-nginx --type=LoadBalancer --port=8080
+service/test-nginx exposed
+
+$ minikube service test-nginx
+|-----------|------------|-------------|---------------------------|
+| NAMESPACE |    NAME    | TARGET PORT |            URL            |
+|-----------|------------|-------------|---------------------------|
+| default   | test-nginx |        8080 | http://192.168.49.2:32126 |
+|-----------|------------|-------------|---------------------------|
+🎉  Opening service default/test-nginx in default browser...
+👉  http://192.168.49.2:32126
+
+$ minikube service list
+|----------------------|---------------------------|--------------|---------------------------|
+|      NAMESPACE       |           NAME            | TARGET PORT  |            URL            |
+|----------------------|---------------------------|--------------|---------------------------|
+| default              | kubernetes                | No node port |
+| default              | test-nginx                |         8080 | http://192.168.49.2:32126 |
+| kube-system          | kube-dns                  | No node port |
+| kubernetes-dashboard | dashboard-metrics-scraper | No node port |
+| kubernetes-dashboard | kubernetes-dashboard      | No node port |
+|----------------------|---------------------------|--------------|---------------------------|
+
+$ curl http://192.168.49.2:32126 
+curl: (7) Failed to connect to 192.168.49.2 port 32126: Connection refused
+
+$ kubectl delete service test-nginx
+service "test-nginx" deleted
+
+$ kubectl expose deployment test-nginx --type=LoadBalancer --port=80
+service/test-nginx exposed
+
+$ minikube service test-nginx
+|-----------|------------|-------------|---------------------------|
+| NAMESPACE |    NAME    | TARGET PORT |            URL            |
+|-----------|------------|-------------|---------------------------|
+| default   | test-nginx |          80 | http://192.168.49.2:31038 |
+|-----------|------------|-------------|---------------------------|
+🎉  Opening service default/test-nginx in default browser...
+👉  http://192.168.49.2:31038
+
+$ curl http://192.168.49.2:31038
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+```
