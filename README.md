@@ -61,3 +61,22 @@ BODY:
 -no body in request-
 
 ```
+
+```
+$ kubectl delete service hello-node
+service "hello-node" deleted
+
+$ kubectl delete deployment hello-node
+deployment.apps "hello-node" deleted
+
+$ kubectl get all
+NAME                              READY   STATUS        RESTARTS   AGE
+pod/hello-node-7567d9fdc9-h22jm   0/1     Terminating   0          8m31s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   102m
+
+$ kubectl get all
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   102m
+```
