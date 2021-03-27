@@ -1,4 +1,7 @@
 ```
+# su - developer
+Password: 
+
 $ kubectl create deployment hello-node --image=k8s.gcr.io/echoserver:1.4
 deployment.apps/hello-node created
 
