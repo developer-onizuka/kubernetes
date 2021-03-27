@@ -208,3 +208,15 @@ Commercial support is available at
 </body>
 </html>
 ```
+
+```
+$ kubectl delete service test-nginx
+service "test-nginx" deleted
+
+$ kubectl delete deployment test-nginx
+deployment.apps "test-nginx" deleted
+
+$ kubectl get all
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   165m
+```
