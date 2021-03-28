@@ -3,6 +3,9 @@
 # sudo dpkg -i minikube_latest_amd64.deb
 # sudo apt install conntrack
 # sudo apt install docker.io
+# curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+# chmod 775 kubectl 
+# sudo mv kubectl /usr/local/bin/
 
 # sudo adduser developer
 # sudo groupadd docker
