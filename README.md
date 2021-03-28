@@ -237,6 +237,43 @@ service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   165m
 
 
 ```
+$ cat deployment/nginx_v1.14.2.yaml 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-nginx
+spec:
+  selector:
+    matchLabels:
+      run: test-nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: test-nginx
+    spec:
+      containers:
+      - name: test-nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+
+$ cat service/nginx.yaml 
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-nginx
+  labels:
+    run: test-nginx
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: test-nginx
+  type: LoadBalancer
+  
 $ kubectl apply -f deployment/nginx_v1.14.2.yaml 
 deployment.apps/test-nginx created
 
@@ -309,4 +346,81 @@ Commercial support is available at
 <p><em>Thank you for using nginx.</em></p>
 </body>
 </html>
+```
+```
+$ diff nginx_v1.14.2.yaml nginx_v1.16.1.yaml 
+17c17
+<         image: nginx:1.14.2
+---
+>         image: nginx:1.16.1
+
+$ kubectl get pods -l run=test-nginx
+NAME                          READY   STATUS    RESTARTS   AGE
+test-nginx-7ccdf46987-m8k6c   1/1     Running   0          7m4s
+test-nginx-7ccdf46987-q5txt   1/1     Running   0          7m4s
+
+$ kubectl apply -f nginx_v1.16.1.yaml 
+deployment.apps/test-nginx configured
+
+$ kubectl get pods -l run=test-nginx
+NAME                          READY   STATUS              RESTARTS   AGE
+test-nginx-6d4f7fd59b-r2pmj   0/1     ContainerCreating   0          3s
+test-nginx-7ccdf46987-m8k6c   1/1     Running             0          7m51s
+test-nginx-7ccdf46987-q5txt   1/1     Running             0          7m51s
+
+$ kubectl get pods -l run=test-nginx
+NAME                          READY   STATUS              RESTARTS   AGE
+test-nginx-6d4f7fd59b-l2tmq   0/1     ContainerCreating   0          0s
+test-nginx-6d4f7fd59b-r2pmj   1/1     Running             0          24s
+test-nginx-7ccdf46987-m8k6c   1/1     Terminating         0          8m12s
+test-nginx-7ccdf46987-q5txt   1/1     Running             0          8m12s
+
+$ kubectl get pods -l run=test-nginx
+NAME                          READY   STATUS        RESTARTS   AGE
+test-nginx-6d4f7fd59b-l2tmq   1/1     Running       0          4s
+test-nginx-6d4f7fd59b-r2pmj   1/1     Running       0          28s
+test-nginx-7ccdf46987-m8k6c   0/1     Terminating   0          8m16s
+test-nginx-7ccdf46987-q5txt   0/1     Terminating   0          8m16s
+
+$ kubectl get pods -l run=test-nginx
+NAME                          READY   STATUS    RESTARTS   AGE
+test-nginx-6d4f7fd59b-l2tmq   1/1     Running   0          10s
+test-nginx-6d4f7fd59b-r2pmj   1/1     Running   0          34s
+
+$ kubectl describe deployment test-nginx
+Name:                   test-nginx
+Namespace:              default
+CreationTimestamp:      Sun, 28 Mar 2021 07:36:02 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 2
+Selector:               run=test-nginx
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  run=test-nginx
+  Containers:
+   test-nginx:
+    Image:        nginx:1.16.1
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   test-nginx-6d4f7fd59b (2/2 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  11m    deployment-controller  Scaled up replica set test-nginx-7ccdf46987 to 2
+  Normal  ScalingReplicaSet  3m40s  deployment-controller  Scaled up replica set test-nginx-6d4f7fd59b to 1
+  Normal  ScalingReplicaSet  3m16s  deployment-controller  Scaled down replica set test-nginx-7ccdf46987 to 1
+  Normal  ScalingReplicaSet  3m16s  deployment-controller  Scaled up replica set test-nginx-6d4f7fd59b to 2
+  Normal  ScalingReplicaSet  3m14s  deployment-controller  Scaled down replica set test-nginx-7ccdf46987 to 0
 ```
