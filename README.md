@@ -33,13 +33,13 @@ $ docker ps -a
 CONTAINER ID        IMAGE                                 COMMAND                  CREATED             STATUS              PORTS                                                                                                                                  NAMES
 34e4788f42ac        gcr.io/k8s-minikube/kicbase:v0.0.18   "/usr/local/bin/entr…"   2 hours ago         Up 58 seconds       127.0.0.1:32772->22/tcp, 127.0.0.1:32771->2376/tcp, 127.0.0.1:32770->5000/tcp, 127.0.0.1:32769->8443/tcp, 127.0.0.1:32768->32443/tcp   minikube
 
-$ docker exec -it 34e4788f42ac /bin/bash
+$ docker exec -it $(docker ps -aq) /bin/bash
+
 root@minikube:/# docker images
 REPOSITORY                                TAG        IMAGE ID       CREATED         SIZE
-nginx                                     latest     b8cf2cbeabb9   7 hours ago     133MB
 k8s.gcr.io/kube-proxy                     v1.20.2    43154ddb57a8   2 months ago    118MB
-k8s.gcr.io/kube-apiserver                 v1.20.2    a8c2fdb8bf76   2 months ago    122MB
 k8s.gcr.io/kube-controller-manager        v1.20.2    a27166429d98   2 months ago    116MB
+k8s.gcr.io/kube-apiserver                 v1.20.2    a8c2fdb8bf76   2 months ago    122MB
 k8s.gcr.io/kube-scheduler                 v1.20.2    ed2c44fbdd78   2 months ago    46.4MB
 kubernetesui/dashboard                    v2.1.0     9a07b5b4bfac   3 months ago    226MB
 gcr.io/k8s-minikube/storage-provisioner   v4         85069258b98a   3 months ago    29.7MB
@@ -47,7 +47,7 @@ k8s.gcr.io/etcd                           3.4.13-0   0369cf4303ff   7 months ago
 k8s.gcr.io/coredns                        1.7.0      bfe3a36ebd25   9 months ago    45.2MB
 kubernetesui/metrics-scraper              v1.0.4     86262685d9ab   12 months ago   36.9MB
 k8s.gcr.io/pause                          3.2        80d28bedfe5d   13 months ago   683kB
-k8s.gcr.io/echoserver                     1.4        a90209bb39e3   4 years ago     140MB
+
 root@minikube:/# exit
 exit
 
