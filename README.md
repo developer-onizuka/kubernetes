@@ -1,4 +1,15 @@
 ```
+# curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+# sudo dpkg -i minikube_latest_amd64.deb
+# sudo apt install conntrack
+# sudo apt install docker.io
+
+# sudo adduser developer
+# sudo groupadd docker
+# sudo usermod -aG docker developer
+```
+
+```
 # su - developer
 Password: 
 
