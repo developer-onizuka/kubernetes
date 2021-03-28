@@ -234,3 +234,79 @@ $ kubectl get all
 NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
 service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   165m
 ```
+
+
+```
+$ kubectl apply -f deployment/nginx_v1.14.2.yaml 
+deployment.apps/test-nginx created
+
+$ kubectl get all
+NAME                              READY   STATUS    RESTARTS   AGE
+pod/test-nginx-7ccdf46987-m8k6c   1/1     Running   0          8s
+pod/test-nginx-7ccdf46987-q5txt   1/1     Running   0          8s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   20h
+
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/test-nginx   2/2     2            2           8s
+
+NAME                                    DESIRED   CURRENT   READY   AGE
+replicaset.apps/test-nginx-7ccdf46987   2         2         2       8s
+
+$ kubectl apply -f service/nginx.yaml 
+service/test-nginx created
+
+developer@hisayuki:~/k8s$ kubectl get all
+NAME                              READY   STATUS    RESTARTS   AGE
+pod/test-nginx-7ccdf46987-m8k6c   1/1     Running   0          25s
+pod/test-nginx-7ccdf46987-q5txt   1/1     Running   0          25s
+
+NAME                 TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+service/kubernetes   ClusterIP      10.96.0.1       <none>        443/TCP        20h
+service/test-nginx   LoadBalancer   10.96.168.116   <pending>     80:30120/TCP   4s
+
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/test-nginx   2/2     2            2           25s
+
+NAME                                    DESIRED   CURRENT   READY   AGE
+replicaset.apps/test-nginx-7ccdf46987   2         2         2       25s
+
+$ minikube service list
+|----------------------|---------------------------|--------------|---------------------------|
+|      NAMESPACE       |           NAME            | TARGET PORT  |            URL            |
+|----------------------|---------------------------|--------------|---------------------------|
+| default              | kubernetes                | No node port |
+| default              | test-nginx                |           80 | http://192.168.49.2:30120 |
+| kube-system          | kube-dns                  | No node port |
+| kubernetes-dashboard | dashboard-metrics-scraper | No node port |
+| kubernetes-dashboard | kubernetes-dashboard      | No node port |
+|----------------------|---------------------------|--------------|---------------------------|
+
+$ curl http://192.168.49.2:30120
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+```
