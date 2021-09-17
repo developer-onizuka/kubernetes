@@ -3,9 +3,9 @@ https://github.com/developer-onizuka/gpu-operator3
 
 |  | CPU | Memory | GPU | GPU Driver |
 | --- | --- | --- | --- | --- |
-| Master | 2 | 8,192 MB | no | --- |
-| Worker1 | 2 | 8,192 MB | no | --- |
-| Worker2 | 2 | 8,192 MB | no | --- |
+| Master | 2 | 8,192 MB | no | N/A |
+| Worker1 | 2 | 8,192 MB | no | N/A |
+| Worker2 | 2 | 8,192 MB | no | N/A |
 
 # 0-1. Workloads
 |  | Replicas | ClusterIP | ExternalIP | Storage | How to access from outside |
