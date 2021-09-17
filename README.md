@@ -7,6 +7,7 @@ https://github.com/developer-onizuka/gpu-operator3
 | Worker1 | 2 | 8,192 MB | no | --- |
 | Worker2 | 2 | 8,192 MB | no | --- |
 
+# 0-1. Workloads
 |  | Replicas | ClusterIP | ExternalIP | How to access from outside |
 | --- | --- | --- | --- | --- |
 | HAProxy | N/A | N/A | N/A | Blowse master-node's IP address | 
