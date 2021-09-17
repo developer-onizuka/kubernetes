@@ -1,4 +1,5 @@
-
+# 0. Create 1 master node and 2 worker nodes in the cluster
+https://github.com/developer-onizuka/gpu-operator3
 
 # 1. git clone this project
 ```
@@ -491,10 +492,9 @@ root@dnsutils:/# curl https://employee-test:5001 -k
 </html>
 ```
 
-# 7. Create Nginx's config files on Worker1 and Worker2
+# 7. Create Nginx's config files and Configmap
 ```
-$ sudo mkdir -p /var/data/nginx
-$ sudo vi /var/data/nginx/default.conf
+$ cat default.conf
 upstream proxy.com {
         server employee-test:5001;
 }
@@ -508,6 +508,9 @@ server {
                 proxy_pass https://proxy.com;
         }
 }
+
+$ kubectl create configmap nginx-config --from-file=default.conf
+configmap/nginx-config created
 ```
 # 8. Create depolyment of Nginx
 ```
@@ -538,125 +541,6 @@ Events:
   Type    Reason      Age    From                Message
   ----    ------      ----   ----                -------
   Normal  ExternalIP  3m43s  service-controller  Added: 192.168.1.10
-
-$ kubectl describe pod nginx-test
-Name:         nginx-test-6998749496-dhxx7
-Namespace:    default
-Priority:     0
-Node:         worker2/192.168.122.219
-Start Time:   Fri, 17 Sep 2021 18:03:57 +0900
-Labels:       pod-template-hash=6998749496
-              run=nginx-test
-Annotations:  cni.projectcalico.org/containerID: 9ec05a75bf815752ade25f0e1b5dad7e641030f5b25277dddb4679c677110c9f
-              cni.projectcalico.org/podIP: 192.168.189.73/32
-              cni.projectcalico.org/podIPs: 192.168.189.73/32
-Status:       Running
-IP:           192.168.189.73
-IPs:
-  IP:           192.168.189.73
-Controlled By:  ReplicaSet/nginx-test-6998749496
-Containers:
-  nginx:
-    Container ID:   docker://c0f5f088d6a5eb79684fbfad3801eaea25405e2fdc4b42f6758f21b825c604da
-    Image:          nginx:1.14.2
-    Image ID:       docker-pullable://nginx@sha256:f7988fb6c02e0ce69257d9bd9cf37ae20a60f1df7563c3a2a6abe24160306b8d
-    Port:           80/TCP
-    Host Port:      0/TCP
-    State:          Running
-      Started:      Fri, 17 Sep 2021 18:03:59 +0900
-    Ready:          True
-    Restart Count:  0
-    Environment:    <none>
-    Mounts:
-      /etc/nginx/conf.d from nginx-conf (rw)
-      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-7lzq9 (ro)
-Conditions:
-  Type              Status
-  Initialized       True 
-  Ready             True 
-  ContainersReady   True 
-  PodScheduled      True 
-Volumes:
-  nginx-conf:
-    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
-    ClaimName:  nginx-pvc
-    ReadOnly:   false
-  kube-api-access-7lzq9:
-    Type:                    Projected (a volume that contains injected data from multiple sources)
-    TokenExpirationSeconds:  3607
-    ConfigMapName:           kube-root-ca.crt
-    ConfigMapOptional:       <nil>
-    DownwardAPI:             true
-QoS Class:                   BestEffort
-Node-Selectors:              <none>
-Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
-                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
-Events:
-  Type    Reason     Age    From               Message
-  ----    ------     ----   ----               -------
-  Normal  Scheduled  8m37s  default-scheduler  Successfully assigned default/nginx-test-6998749496-dhxx7 to worker2
-  Normal  Pulled     8m35s  kubelet            Container image "nginx:1.14.2" already present on machine
-  Normal  Created    8m35s  kubelet            Created container nginx
-  Normal  Started    8m35s  kubelet            Started container nginx
-
-Name:         nginx-test-6998749496-fhsmt
-Namespace:    default
-Priority:     0
-Node:         worker1/192.168.122.18
-Start Time:   Fri, 17 Sep 2021 18:03:57 +0900
-Labels:       pod-template-hash=6998749496
-              run=nginx-test
-Annotations:  cni.projectcalico.org/containerID: f3a04cafa6e0514981a346a4f2ffc3ef6ccbc8164ea128cd4e0e23a6cc8efbb7
-              cni.projectcalico.org/podIP: 192.168.235.138/32
-              cni.projectcalico.org/podIPs: 192.168.235.138/32
-Status:       Running
-IP:           192.168.235.138
-IPs:
-  IP:           192.168.235.138
-Controlled By:  ReplicaSet/nginx-test-6998749496
-Containers:
-  nginx:
-    Container ID:   docker://216d97439197a27948663a0e2d5592be3bdbe3bfb8837aa13d4b73c9f4db5656
-    Image:          nginx:1.14.2
-    Image ID:       docker-pullable://nginx@sha256:f7988fb6c02e0ce69257d9bd9cf37ae20a60f1df7563c3a2a6abe24160306b8d
-    Port:           80/TCP
-    Host Port:      0/TCP
-    State:          Running
-      Started:      Fri, 17 Sep 2021 18:03:59 +0900
-    Ready:          True
-    Restart Count:  0
-    Environment:    <none>
-    Mounts:
-      /etc/nginx/conf.d from nginx-conf (rw)
-      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-zmhgg (ro)
-Conditions:
-  Type              Status
-  Initialized       True 
-  Ready             True 
-  ContainersReady   True 
-  PodScheduled      True 
-Volumes:
-  nginx-conf:
-    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
-    ClaimName:  nginx-pvc
-    ReadOnly:   false
-  kube-api-access-zmhgg:
-    Type:                    Projected (a volume that contains injected data from multiple sources)
-    TokenExpirationSeconds:  3607
-    ConfigMapName:           kube-root-ca.crt
-    ConfigMapOptional:       <nil>
-    DownwardAPI:             true
-QoS Class:                   BestEffort
-Node-Selectors:              <none>
-Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
-                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
-Events:
-  Type    Reason     Age    From               Message
-  ----    ------     ----   ----               -------
-  Normal  Scheduled  8m37s  default-scheduler  Successfully assigned default/nginx-test-6998749496-fhsmt to worker1
-  Normal  Pulled     8m35s  kubelet            Container image "nginx:1.14.2" already present on machine
-  Normal  Created    8m35s  kubelet            Created container nginx
-  Normal  Started    8m35s  kubelet            Started container nginx
 ```
 
 # 9. Check each IP
@@ -671,12 +555,16 @@ $ kubectl describe nodes| grep -e Hostname -e InternalIP
   Hostname:    worker2
 ```
 # 9-2. Endpoint IP address of Nginx's service
+https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-17%2018-19-24.png
+
+https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-17%2018-19-16.png
 ```
 $ kubectl describe services nginx-test | grep Endpoint
 Endpoints:                192.168.189.73:80,192.168.235.138:80
 ```
 
 # 9-3. External IP address 
+https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-17%2018-19-33.png
 ```
 $ kubectl get services
 NAME            TYPE           CLUSTER-IP       EXTERNAL-IP    PORT(S)             AGE
@@ -687,6 +575,7 @@ nginx-test      LoadBalancer   10.108.176.185   192.168.1.10   8080:30875/TCP   
 ```
 
 # 10. Expose Proxy address for outside world
+https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-17%2018-16-40.png
 ```
 $ sudo docker run -itd --rm --name haproxy -p 80:80 -v $(pwd)/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro haproxy:1.8
 
