@@ -8,12 +8,12 @@ https://github.com/developer-onizuka/gpu-operator3
 | Worker2 | 2 | 8,192 MB | no | --- |
 
 # 0-1. Workloads
-|  | Replicas | ClusterIP | ExternalIP | How to access from outside |
+|  | Replicas | ClusterIP | ExternalIP | Storage | How to access from outside |
 | --- | --- | --- | --- | --- |
-| HAProxy | N/A | N/A | N/A | Blowse master-node's IP address | 
-| Nginx | 2 | resolved DNS | 192.168.1.10 | --- |
-| Employee Web App | 4 | resolved DNS | no | --- |
-| mongoDB | 1 | resolved DNS | no | --- |
+| HAProxy | N/A | N/A | N/A | N/A | Blowse master-node's IP address | 
+| Nginx | 2 | resolved DNS | 192.168.1.10 | ephemeral | --- |
+| Employee Web App | 4 | resolved DNS | no | ephemeral | --- |
+| mongoDB | 1 | resolved DNS | no | Persistent | --- |
 
 # 1. git clone this project
 ```
