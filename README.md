@@ -580,6 +580,36 @@ root@dnsutils:/#
 $ sudo mkdir -p /var/data/nginx
 $ sudo vi /var/data/nginx/default.conf
 
+$ kubectl describe pod nginx-test |grep ^Node:
+Node:         worker1/192.168.122.18
+Node:         worker2/192.168.122.219
+
+$ kubectl get services
+NAME            TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE
+employee-test   ClusterIP      10.97.233.212   <none>        5001/TCP,5000/TCP   18m
+kubernetes      ClusterIP      10.96.0.1       <none>        443/TCP             4d18h
+mongo-test      ClusterIP      10.98.25.12     <none>        27017/TCP           43m
+nginx-test      LoadBalancer   10.96.221.84    <pending>     8080:31241/TCP      2m19s
+
+$ kubectl describe services nginx-test
+Name:                     nginx-test
+Namespace:                default
+Labels:                   run=nginx-test
+Annotations:              <none>
+Selector:                 run=nginx-test
+Type:                     LoadBalancer
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.96.221.84
+IPs:                      10.96.221.84
+Port:                     http  8080/TCP
+TargetPort:               80/TCP
+NodePort:                 http  31241/TCP
+Endpoints:                192.168.189.70:80,192.168.235.137:80
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+
 
 $ kubectl describe pod nginx-test
 Name:         nginx-test-6998749496-dfqjc
@@ -702,7 +732,7 @@ Events:
   Normal  Created    57s   kubelet            Created container nginx
   Normal  Started    57s   kubelet            Started container nginx
 
-hisayuki@master:~/containers$ kubectl describe pod nginx-test |grep ^Node:
+$ kubectl describe pod nginx-test |grep ^Node:
 Node:         worker1/192.168.122.18
 Node:         worker2/192.168.122.219
 
