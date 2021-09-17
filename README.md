@@ -1,6 +1,6 @@
 
 
-# 1. Git clone this project
+# 1. git clone this project
 ```
 $ git clone https://github.com/developer-onizuka/kubernetes.git
 ```
