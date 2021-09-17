@@ -1,6 +1,19 @@
 # 0. Create one master-node and two worker-nodes in the cluster
 https://github.com/developer-onizuka/gpu-operator3
 
+|  | CPU | Memory | GPU | GPU Driver |
+| --- | --- | --- | --- | --- |
+| Master | 2 | 8,192 MB | no | --- |
+| Worker1 | 2 | 8,192 MB | no | --- |
+| Worker2 | 2 | 8,192 MB | no | --- |
+
+|  | Replicas | ClusterIP | ExternalIP | How to access from outside |
+| --- | --- | --- | --- | --- |
+| HAProxy | N/A | N/A | N/A | Blowse master-node's IP address | 
+| Nginx | 2 | resolved DNS | 192.168.1.10 | --- |
+| Employee Web App | 4 | resolved DNS | no | --- |
+| mongoDB | 1 | resolved DNS | no | --- |
+
 # 1. git clone this project
 ```
 $ git clone https://github.com/developer-onizuka/kubernetes.git
