@@ -9,7 +9,7 @@ https://github.com/developer-onizuka/gpu-operator3
 
 # 0-1. Workloads
 |  | Replicas | ClusterIP | ExternalIP | Storage | How to access from outside |
-| --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | --- |
 | HAProxy | N/A | N/A | N/A | N/A | Blowse master-node's IP address | 
 | Nginx | 2 | resolved DNS | 192.168.1.10 | ephemeral | --- |
 | Employee Web App | 4 | resolved DNS | no | ephemeral | --- |
