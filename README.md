@@ -507,5 +507,205 @@ Node:         worker1/192.168.122.18
 Node:         worker2/192.168.122.219
 
 
+root@dnsutils:/# curl https://employee-test:5001 -k
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> - Employee</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" href="/">Employee</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/Home/Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            
+<h1>List of Employees</h1>
+
+<h2></h2>
+
+<a href="/Home/Insert"> Add New Employee</a>
+
+<br /><br />
+
+
+<table border="1" cellpadding="10">
+</table>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - Employee - <a href="/Home/Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js"></script>
+    
+</body>
+</html>
+root@dnsutils:/#
+
+
+<Worker1 and Worker2>
+$ sudo mkdir -p /var/data/nginx
+$ sudo vi /var/data/nginx/default.conf
+
+
+$ kubectl describe pod nginx-test
+Name:         nginx-test-6998749496-dfqjc
+Namespace:    default
+Priority:     0
+Node:         worker1/192.168.122.18
+Start Time:   Fri, 17 Sep 2021 14:54:28 +0900
+Labels:       pod-template-hash=6998749496
+              run=nginx-test
+Annotations:  cni.projectcalico.org/containerID: 7bd697e03b07a78073354fd49eb0387d99e8fd845ba10028e93c956f2a20c1ec
+              cni.projectcalico.org/podIP: 192.168.235.137/32
+              cni.projectcalico.org/podIPs: 192.168.235.137/32
+Status:       Running
+IP:           192.168.235.137
+IPs:
+  IP:           192.168.235.137
+Controlled By:  ReplicaSet/nginx-test-6998749496
+Containers:
+  nginx:
+    Container ID:   docker://c50c077525f3c5c0f97d74fc21dd2d56fc53436a6e4971b4a7dda631ce03efd0
+    Image:          nginx:1.14.2
+    Image ID:       docker-pullable://nginx@sha256:f7988fb6c02e0ce69257d9bd9cf37ae20a60f1df7563c3a2a6abe24160306b8d
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Fri, 17 Sep 2021 14:55:04 +0900
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /etc/nginx/conf.d from nginx-conf (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-tkngj (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  nginx-conf:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  nginx-pvc
+    ReadOnly:   false
+  kube-api-access-tkngj:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  92s   default-scheduler  Successfully assigned default/nginx-test-6998749496-dfqjc to worker1
+  Normal  Pulling    90s   kubelet            Pulling image "nginx:1.14.2"
+  Normal  Pulled     57s   kubelet            Successfully pulled image "nginx:1.14.2" in 33.521338323s
+  Normal  Created    57s   kubelet            Created container nginx
+  Normal  Started    56s   kubelet            Started container nginx
+
+Name:         nginx-test-6998749496-w8g7l
+Namespace:    default
+Priority:     0
+Node:         worker2/192.168.122.219
+Start Time:   Fri, 17 Sep 2021 14:54:28 +0900
+Labels:       pod-template-hash=6998749496
+              run=nginx-test
+Annotations:  cni.projectcalico.org/containerID: 8263f5e79d09c1455ac89aa442a5daf23428bf2ebed28e20164801a2ae8d07f1
+              cni.projectcalico.org/podIP: 192.168.189.70/32
+              cni.projectcalico.org/podIPs: 192.168.189.70/32
+Status:       Running
+IP:           192.168.189.70
+IPs:
+  IP:           192.168.189.70
+Controlled By:  ReplicaSet/nginx-test-6998749496
+Containers:
+  nginx:
+    Container ID:   docker://f328b95290aee85a1ea845f3ac12f2c67d15d56770cb06716260983970b4adf0
+    Image:          nginx:1.14.2
+    Image ID:       docker-pullable://nginx@sha256:f7988fb6c02e0ce69257d9bd9cf37ae20a60f1df7563c3a2a6abe24160306b8d
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Fri, 17 Sep 2021 14:55:03 +0900
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /etc/nginx/conf.d from nginx-conf (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-7f2qt (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  nginx-conf:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  nginx-pvc
+    ReadOnly:   false
+  kube-api-access-7f2qt:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  92s   default-scheduler  Successfully assigned default/nginx-test-6998749496-w8g7l to worker2
+  Normal  Pulling    91s   kubelet            Pulling image "nginx:1.14.2"
+  Normal  Pulled     58s   kubelet            Successfully pulled image "nginx:1.14.2" in 32.922793976s
+  Normal  Created    57s   kubelet            Created container nginx
+  Normal  Started    57s   kubelet            Started container nginx
+
+hisayuki@master:~/containers$ kubectl describe pod nginx-test |grep ^Node:
+Node:         worker1/192.168.122.18
+Node:         worker2/192.168.122.219
+
+
 
 ```
