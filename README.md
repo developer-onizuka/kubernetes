@@ -324,3 +324,17 @@ listen http-in
     server proxy-server 192.168.1.10:8080 
    
 ```
+
+# 11. Dash board
+```
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+$ kubectl proxy
+```
+You need the token to sign in dash board.
+```
+$ kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep deploy |awk '{print $1}')
+```
+Web access to followings:
+-----
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/overview?namespace=default
+
