@@ -233,6 +233,279 @@ Address:	10.96.0.10#53
 Name:	mongo-test.default.svc.cluster.local
 Address: 10.98.25.12
 
+root@dnsutils:/# curl mongo-test:27017
+It looks like you are trying to access MongoDB over HTTP on the native driver port.
+
+
+$ kubectl apply -f employee.yaml 
+service/employee-test created
+deployment.apps/employee-test created
+
+$ kubectl get pods
+NAME                             READY   STATUS              RESTARTS   AGE
+dnsutils                         1/1     Running             0          22m
+employee-test-85cf649cf6-4mzp6   0/1     ContainerCreating   0          10s
+employee-test-85cf649cf6-7mjdc   0/1     ContainerCreating   0          10s
+employee-test-85cf649cf6-hx2jh   0/1     ContainerCreating   0          10s
+employee-test-85cf649cf6-hz9hz   0/1     ContainerCreating   0          10s
+mongo-test-67f5dd84b7-4rssk      1/1     Running             0          25m
+
+$ kubectl get pods
+NAME                             READY   STATUS    RESTARTS   AGE
+dnsutils                         1/1     Running   0          24m
+employee-test-85cf649cf6-4mzp6   1/1     Running   0          2m30s
+employee-test-85cf649cf6-7mjdc   1/1     Running   0          2m30s
+employee-test-85cf649cf6-hx2jh   1/1     Running   0          2m30s
+employee-test-85cf649cf6-hz9hz   1/1     Running   0          2m30s
+mongo-test-67f5dd84b7-4rssk      1/1     Running   0          28m
+
+$ kubectl get services
+NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE
+employee-test   ClusterIP   10.97.233.212   <none>        5001/TCP,5000/TCP   2m40s
+kubernetes      ClusterIP   10.96.0.1       <none>        443/TCP             4d18h
+mongo-test      ClusterIP   10.98.25.12     <none>        27017/TCP           28m
+
+
+
+$ kubectl describe pod employee-test
+Name:         employee-test-85cf649cf6-4mzp6
+Namespace:    default
+Priority:     0
+Node:         worker1/192.168.122.18
+Start Time:   Fri, 17 Sep 2021 14:38:38 +0900
+Labels:       pod-template-hash=85cf649cf6
+              run=employee-test
+Annotations:  cni.projectcalico.org/containerID: adef28e082b6fcaaf7b6052f30811303178ef6c2e1d9326179bd9ab782c2a778
+              cni.projectcalico.org/podIP: 192.168.235.135/32
+              cni.projectcalico.org/podIPs: 192.168.235.135/32
+Status:       Running
+IP:           192.168.235.135
+IPs:
+  IP:           192.168.235.135
+Controlled By:  ReplicaSet/employee-test-85cf649cf6
+Containers:
+  employee:
+    Container ID:  docker://7623a1690d6c456f6c8bb2c4ff53346d8dacd46d5f6824dad266f3bd510d28de
+    Image:         developeronizuka/employee
+    Image ID:      docker-pullable://developeronizuka/employee@sha256:ad36f06fcb5aa8d4da7dc36ac9bf42223617c3330e8dfcaef1b5a30ba9f71084
+    Ports:         5001/TCP, 5000/TCP
+    Host Ports:    0/TCP, 0/TCP
+    Command:
+      /usr/local/dotnet/publish/Employee
+    State:          Running
+      Started:      Fri, 17 Sep 2021 14:40:56 +0900
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      MONGO:  mongo-test
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-jshhm (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-jshhm:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  3m19s  default-scheduler  Successfully assigned default/employee-test-85cf649cf6-4mzp6 to worker1
+  Normal  Pulling    3m17s  kubelet            Pulling image "developeronizuka/employee"
+  Normal  Pulled     61s    kubelet            Successfully pulled image "developeronizuka/employee" in 2m15.89478361s
+  Normal  Created    61s    kubelet            Created container employee
+  Normal  Started    61s    kubelet            Started container employee
+
+Name:         employee-test-85cf649cf6-7mjdc
+Namespace:    default
+Priority:     0
+Node:         worker2/192.168.122.219
+Start Time:   Fri, 17 Sep 2021 14:38:38 +0900
+Labels:       pod-template-hash=85cf649cf6
+              run=employee-test
+Annotations:  cni.projectcalico.org/containerID: 0f236a7d9afc40259d91b01fab9f69300ce6e058ac38c88cb75a12cee259f440
+              cni.projectcalico.org/podIP: 192.168.189.69/32
+              cni.projectcalico.org/podIPs: 192.168.189.69/32
+Status:       Running
+IP:           192.168.189.69
+IPs:
+  IP:           192.168.189.69
+Controlled By:  ReplicaSet/employee-test-85cf649cf6
+Containers:
+  employee:
+    Container ID:  docker://8d22b300e1ba8c95a5b8abae646721628b614d07d7b333b673872cf1003cfa2b
+    Image:         developeronizuka/employee
+    Image ID:      docker-pullable://developeronizuka/employee@sha256:ad36f06fcb5aa8d4da7dc36ac9bf42223617c3330e8dfcaef1b5a30ba9f71084
+    Ports:         5001/TCP, 5000/TCP
+    Host Ports:    0/TCP, 0/TCP
+    Command:
+      /usr/local/dotnet/publish/Employee
+    State:          Running
+      Started:      Fri, 17 Sep 2021 14:40:56 +0900
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      MONGO:  mongo-test
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-szstm (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-szstm:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  3m19s  default-scheduler  Successfully assigned default/employee-test-85cf649cf6-7mjdc to worker2
+  Normal  Pulling    3m17s  kubelet            Pulling image "developeronizuka/employee"
+  Normal  Pulled     61s    kubelet            Successfully pulled image "developeronizuka/employee" in 2m16.389641627s
+  Normal  Created    61s    kubelet            Created container employee
+  Normal  Started    61s    kubelet            Started container employee
+
+Name:         employee-test-85cf649cf6-hx2jh
+Namespace:    default
+Priority:     0
+Node:         worker1/192.168.122.18
+Start Time:   Fri, 17 Sep 2021 14:38:38 +0900
+Labels:       pod-template-hash=85cf649cf6
+              run=employee-test
+Annotations:  cni.projectcalico.org/containerID: 3538000fe1ff42d065b8632e6cf7c5012f6f3fe6dbe66fcbc68d0adba3a084ef
+              cni.projectcalico.org/podIP: 192.168.235.136/32
+              cni.projectcalico.org/podIPs: 192.168.235.136/32
+Status:       Running
+IP:           192.168.235.136
+IPs:
+  IP:           192.168.235.136
+Controlled By:  ReplicaSet/employee-test-85cf649cf6
+Containers:
+  employee:
+    Container ID:  docker://22fc9172fa7ca34f2cb03e73f06fbca0d2f99d8c7a180a9350dd7d1f53ea44d0
+    Image:         developeronizuka/employee
+    Image ID:      docker-pullable://developeronizuka/employee@sha256:ad36f06fcb5aa8d4da7dc36ac9bf42223617c3330e8dfcaef1b5a30ba9f71084
+    Ports:         5001/TCP, 5000/TCP
+    Host Ports:    0/TCP, 0/TCP
+    Command:
+      /usr/local/dotnet/publish/Employee
+    State:          Running
+      Started:      Fri, 17 Sep 2021 14:40:58 +0900
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      MONGO:  mongo-test
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-lc7z8 (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-lc7z8:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  3m19s  default-scheduler  Successfully assigned default/employee-test-85cf649cf6-hx2jh to worker1
+  Normal  Pulling    3m17s  kubelet            Pulling image "developeronizuka/employee"
+  Normal  Pulled     59s    kubelet            Successfully pulled image "developeronizuka/employee" in 2m18.299517584s
+  Normal  Created    59s    kubelet            Created container employee
+  Normal  Started    59s    kubelet            Started container employee
+
+Name:         employee-test-85cf649cf6-hz9hz
+Namespace:    default
+Priority:     0
+Node:         worker2/192.168.122.219
+Start Time:   Fri, 17 Sep 2021 14:38:38 +0900
+Labels:       pod-template-hash=85cf649cf6
+              run=employee-test
+Annotations:  cni.projectcalico.org/containerID: 5389aa976424fd025fb5e9af52f542c0903dc12a9d1cb071e7e3fc54efc2a4b1
+              cni.projectcalico.org/podIP: 192.168.189.68/32
+              cni.projectcalico.org/podIPs: 192.168.189.68/32
+Status:       Running
+IP:           192.168.189.68
+IPs:
+  IP:           192.168.189.68
+Controlled By:  ReplicaSet/employee-test-85cf649cf6
+Containers:
+  employee:
+    Container ID:  docker://d6c9ffa923e6cdc59153f4f39aff973faeab99dd200d54d19dab6047c22b126e
+    Image:         developeronizuka/employee
+    Image ID:      docker-pullable://developeronizuka/employee@sha256:ad36f06fcb5aa8d4da7dc36ac9bf42223617c3330e8dfcaef1b5a30ba9f71084
+    Ports:         5001/TCP, 5000/TCP
+    Host Ports:    0/TCP, 0/TCP
+    Command:
+      /usr/local/dotnet/publish/Employee
+    State:          Running
+      Started:      Fri, 17 Sep 2021 14:40:54 +0900
+    Ready:          True
+    Restart Count:  0
+    Environment:
+      MONGO:  mongo-test
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-dpkbm (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  kube-api-access-dpkbm:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  3m19s  default-scheduler  Successfully assigned default/employee-test-85cf649cf6-hz9hz to worker2
+  Normal  Pulling    3m17s  kubelet            Pulling image "developeronizuka/employee"
+  Normal  Pulled     64s    kubelet            Successfully pulled image "developeronizuka/employee" in 2m13.755453227s
+  Normal  Created    63s    kubelet            Created container employee
+  Normal  Started    63s    kubelet            Started container employee
+
+$ kubectl describe pod employee-test |grep ^Node:
+Node:         worker1/192.168.122.18
+Node:         worker2/192.168.122.219
+Node:         worker1/192.168.122.18
+Node:         worker2/192.168.122.219
+
 
 
 ```
