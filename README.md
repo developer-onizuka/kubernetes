@@ -739,5 +739,25 @@ Node:         worker1/192.168.122.18
 Node:         worker2/192.168.122.219
 
 
+$ kubectl describe nodes| grep -e Hostname -e InternalIP
+  InternalIP:  192.168.122.183
+  Hostname:    master
+  InternalIP:  192.168.122.18
+  Hostname:    worker1
+  InternalIP:  192.168.122.219
+  Hostname:    worker2
+
+$ kubectl describe services nginx-test | grep Endpoint
+Endpoints:                192.168.189.70:80,192.168.235.137:80
+
+
+$ kubectl get services
+NAME            TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE
+employee-test   ClusterIP      10.97.233.212   <none>        5001/TCP,5000/TCP   104m
+kubernetes      ClusterIP      10.96.0.1       <none>        443/TCP             4d19h
+mongo-test      ClusterIP      10.98.25.12     <none>        27017/TCP           130m
+nginx-test      LoadBalancer   10.96.221.84    <pending>     8080:31241/TCP      89m
+
+
 
 ```
