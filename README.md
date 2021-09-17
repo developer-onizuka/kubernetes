@@ -580,6 +580,8 @@ root@dnsutils:/#
 $ sudo mkdir -p /var/data/nginx
 $ sudo vi /var/data/nginx/default.conf
 
+
+$ kubectl apply -f nginx.yaml 
 $ kubectl describe pod nginx-test |grep ^Node:
 Node:         worker1/192.168.122.18
 Node:         worker2/192.168.122.219
