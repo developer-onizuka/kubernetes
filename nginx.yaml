@@ -30,15 +30,16 @@ spec:
       labels:
         run: nginx-test
     spec:
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: nginx-config
       containers:
       - name: nginx
         image: nginx:1.14.2
         volumeMounts:
-        - name: nginx-conf
-          mountPath: /etc/nginx/conf.d
+        - mountPath: /etc/nginx/conf.d
+          name: nginx-config
+          readOnly: true
         ports:
         - containerPort: 80
-      volumes:
-      - name: nginx-conf
-        persistentVolumeClaim:
-         claimName: nginx-pvc
