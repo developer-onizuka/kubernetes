@@ -228,7 +228,7 @@ server {
 $ kubectl create configmap nginx-config --from-file=default.conf
 configmap/nginx-config created
 ```
-# 8. Create depolyment of Nginx
+# 8. Create depolyment of Nginx with 2 repricas
 ```
 $ kubectl apply -f nginx.yaml 
 $ kubectl describe pod nginx-test |grep ^Node:
