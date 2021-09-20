@@ -259,19 +259,16 @@ Selector:                 run=nginx-test
 Type:                     LoadBalancer
 IP Family Policy:         SingleStack
 IP Families:              IPv4
-IP:                       10.108.176.185
-IPs:                      10.108.176.185
-External IPs:             192.168.1.10
+IP:                       10.109.37.19
+IPs:                      10.109.37.19
+External IPs:             192.168.122.183
 Port:                     http  8080/TCP
 TargetPort:               80/TCP
-NodePort:                 http  30875/TCP
-Endpoints:                192.168.189.73:80,192.168.235.138:80
+NodePort:                 http  31952/TCP
+Endpoints:                192.168.189.91:80,192.168.235.150:80
 Session Affinity:         None
 External Traffic Policy:  Cluster
-Events:
-  Type    Reason      Age    From                Message
-  ----    ------      ----   ----                -------
-  Normal  ExternalIP  3m43s  service-controller  Added: 192.168.1.10
+Events:                   <none>
 ```
 
 # 9. Check each IP
@@ -291,18 +288,18 @@ https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%2020
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-17%2018-19-16.png
 ```
 $ kubectl describe services nginx-test | grep Endpoint
-Endpoints:                192.168.189.73:80,192.168.235.138:80
+Endpoints:                192.168.189.91:80,192.168.235.150:80
 ```
 
 # 9-3. External IP address 
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-17%2018-19-33.png
 ```
 $ kubectl get services
-NAME            TYPE           CLUSTER-IP       EXTERNAL-IP    PORT(S)             AGE
-employee-test   ClusterIP      10.97.233.212    <none>         5001/TCP,5000/TCP   3h29m
-kubernetes      ClusterIP      10.96.0.1        <none>         443/TCP             4d21h
-mongo-test      ClusterIP      10.98.25.12      <none>         27017/TCP           3h55m
-nginx-test      LoadBalancer   10.108.176.185   192.168.1.10   8080:30875/TCP      4m26s
+NAME            TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)             AGE
+employee-test   ClusterIP      10.104.136.13   <none>            5001/TCP,5000/TCP   38m
+kubernetes      ClusterIP      10.96.0.1       <none>            443/TCP             3d10h
+mongo-test      ClusterIP      10.102.85.2     <none>            27017/TCP           38m
+nginx-test      LoadBalancer   10.109.37.19    192.168.122.183   8080:31952/TCP      15m
 ```
 
 # 10. Expose Proxy address for outside world
@@ -322,7 +319,7 @@ defaults
 
 listen http-in
     bind *:80
-    server proxy-server 192.168.1.10:8080 
+    server proxy-server 192.168.122.183:8080 
    
 ```
 
