@@ -224,7 +224,7 @@ root@dnsutils:/# curl https://employee-test:5001 -k
 
 # 7. Create Nginx's config files and Configmap
 ```
-$ cat default.conf
+$ cat <<EOF > default.conf
 upstream proxy.com {
         server employee-test:5001;
 }
@@ -238,6 +238,7 @@ server {
                 proxy_pass https://proxy.com;
         }
 }
+EOF
 
 $ kubectl create configmap nginx-config --from-file=default.conf
 configmap/nginx-config created
