@@ -14,7 +14,7 @@ spec:
   selector:
     run: nginx-test
   externalIPs:
-  - 192.168.1.10
+  - 192.168.122.183 # master
 ---
 apiVersion: apps/v1
 kind: Deployment
