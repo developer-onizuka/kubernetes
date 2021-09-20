@@ -283,16 +283,16 @@ $ kubectl describe nodes| grep -e Hostname -e InternalIP
   Hostname:    worker2
 ```
 # 9-2. Endpoint IP address of Nginx's service
-https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-17%2018-19-24.png
+https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2008-27-46.png
 
-https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-17%2018-19-16.png
+https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2008-27-54.png
 ```
 $ kubectl describe services nginx-test | grep Endpoint
 Endpoints:                192.168.189.91:80,192.168.235.150:80
 ```
 
 # 9-3. External IP address 
-https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-17%2018-19-33.png
+https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2008-28-01.png
 ```
 $ kubectl get services
 NAME            TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)             AGE
