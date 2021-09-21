@@ -243,38 +243,7 @@ EOF
 $ kubectl create configmap nginx-config --from-file=default.conf
 configmap/nginx-config created
 ```
-# 8. Deployment of Nginx
-You can choose #8-1 or #8-2.
-
-# 8-1. Create depolyment of Nginx with 2 repricas (LoadBalancer)
-```
-$ kubectl apply -f nginx.yaml 
-$ kubectl describe pod nginx-test |grep ^Node:
-Node:         worker1/192.168.122.18
-Node:         worker2/192.168.122.219
-
-$ kubectl describe services nginx-test
-Name:                     nginx-test
-Namespace:                default
-Labels:                   run=nginx-test
-Annotations:              <none>
-Selector:                 run=nginx-test
-Type:                     LoadBalancer
-IP Family Policy:         SingleStack
-IP Families:              IPv4
-IP:                       10.109.37.19
-IPs:                      10.109.37.19
-External IPs:             192.168.122.183
-Port:                     http  8080/TCP
-TargetPort:               80/TCP
-NodePort:                 http  31952/TCP
-Endpoints:                192.168.189.91:80,192.168.235.150:80
-Session Affinity:         None
-External Traffic Policy:  Cluster
-Events:                   <none>
-```
-
-# 8-2. Create depolyment of Nginx with 2 repricas (NodePort)
+# 8. Create depolyment of Nginx with 2 repricas (NodePort)
 ```
 $ kubectl apply -f nginx-nodeport.yaml 
 $ kubectl describe pod nginx-test |grep ^Node:
@@ -321,18 +290,7 @@ $ kubectl describe services nginx-test | grep Endpoint
 Endpoints:                192.168.189.91:80,192.168.235.150:80
 ```
 
-# 9-3. External IP address (LoadBlancer)
-https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2008-28-01.png
-```
-$ kubectl get services
-NAME            TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)             AGE
-employee-test   ClusterIP      10.104.136.13   <none>            5001/TCP,5000/TCP   38m
-kubernetes      ClusterIP      10.96.0.1       <none>            443/TCP             3d10h
-mongo-test      ClusterIP      10.102.85.2     <none>            27017/TCP           38m
-nginx-test      LoadBalancer   10.109.37.19    192.168.122.183   8080:31952/TCP      15m
-```
-
-# 9-4. External IP address (NodePort)
+# 9-3. External IP address (NodePort)
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-21.png
 
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-29.png
@@ -347,34 +305,13 @@ mongo-test      ClusterIP   10.102.85.2      <none>        27017/TCP           1
 nginx-test      NodePort    10.110.198.181   <none>        8080:30001/TCP      14m
 ```
 
-# 10. HAproxy on Host Machine
-You should choose etheir #10-1 or #10-2 according to #8's choise.
+# 10. Expose Proxy address for outside world using HAproxy on Host Machine
 Docker.io should be installed on Host Machine, prior to this step.
 
 The following picture is taken on my smart phone involved in same network as Host Machine (192.168.11.xx).
 
 https://github.com/developer-onizuka/kubernetes/blob/main/image_123986672.JPG
 
-# 10-1. Expose Proxy address for outside world (LoadBalancer)
-```
-$ cat <<EOF > haproxy.cfg 
-global
-    maxconn 256
-
-defaults
-    mode http
-    timeout client     120000ms
-    timeout server     120000ms
-    timeout connect      6000ms
-
-listen http-in
-    bind *:80
-    server proxy-server 192.168.122.183:8080 
-EOF
-$ sudo docker run -itd --rm --name haproxy -p 80:80 -v $(pwd)/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro haproxy:1.8
-```
-
-# 10-2. Expose Proxy address for outside world (NodePort)
 ```
 $ cat <<EOF > haproxy-nodeport.cfg 
 global
