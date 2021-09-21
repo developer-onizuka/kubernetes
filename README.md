@@ -356,7 +356,6 @@ The following picture is taken on my smart phone involved in same network as Hos
 https://github.com/developer-onizuka/kubernetes/blob/main/image_123986672.JPG
 
 # 10-1. Expose Proxy address for outside world (LoadBalancer)
-https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-17%2018-16-40.png
 ```
 $ cat <<EOF > haproxy.cfg 
 global
@@ -376,7 +375,6 @@ $ sudo docker run -itd --rm --name haproxy -p 80:80 -v $(pwd)/haproxy.cfg:/usr/l
 ```
 
 # 10-2. Expose Proxy address for outside world (NodePort)
-https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-55.png
 ```
 $ cat <<EOF > haproxy-nodeport.cfg 
 global
