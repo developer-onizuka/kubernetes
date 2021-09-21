@@ -94,7 +94,7 @@ mongo-test-67f5dd84b7-4rssk   1/1     Running   0          84s
 $ kubectl get services
 NAME         TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)     AGE
 kubernetes   ClusterIP   10.96.0.1     <none>        443/TCP     4d17h
-mongo-test   ClusterIP   10.98.25.12   <none>        27017/TCP   99s
+mongo-srv    ClusterIP   10.98.25.12   <none>        27017/TCP   99s
 
 $ kubectl describe pods mongo-test-67f5dd84b7-4rssk
 Name:         mongo-test-67f5dd84b7-4rssk
@@ -226,9 +226,9 @@ mongo-test-67f5dd84b7-4rssk      1/1     Running   0          28m
 
 $ kubectl get services
 NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE
-employee-test   ClusterIP   10.97.233.212   <none>        5001/TCP,5000/TCP   2m40s
+employee-srv    ClusterIP   10.97.233.212   <none>        5001/TCP,5000/TCP   2m40s
 kubernetes      ClusterIP   10.96.0.1       <none>        443/TCP             4d18h
-mongo-test      ClusterIP   10.98.25.12     <none>        27017/TCP           28m
+mongo-srv       ClusterIP   10.98.25.12     <none>        27017/TCP           28m
 
 $ kubectl describe pod employee-test |grep ^Node:
 Node:         worker1/192.168.122.18
@@ -343,10 +343,10 @@ https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%2020
 ```
 $ kubectl get services
 NAME            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
-employee-test   ClusterIP   10.104.136.13    <none>        5001/TCP,5000/TCP   129m
+employee-srv    ClusterIP   10.104.136.13    <none>        5001/TCP,5000/TCP   129m
 kubernetes      ClusterIP   10.96.0.1        <none>        443/TCP             3d12h
-mongo-test      ClusterIP   10.102.85.2      <none>        27017/TCP           130m
-nginx-test      NodePort    10.110.198.181   <none>        8080:30001/TCP      14m
+mongo-srv       ClusterIP   10.102.85.2      <none>        27017/TCP           130m
+nginx-srv       NodePort    10.110.198.181   <none>        8080:30001/TCP      14m
 ```
 
 # 10. Expose Proxy address for outside world using HAproxy on Host Machine
