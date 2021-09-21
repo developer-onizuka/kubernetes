@@ -25,18 +25,17 @@ iPhone,etc                    +------>| nginx-srv    +-----+     |              
   |                           |       |              |     |     |                  |
   |    +---------+            |       +--------------+     |     +------------------+
   |    |         +------------+       +----worker2---+     |     +----worker1-------+
-  |    |         |     192.168.122.18:30001          |     |---->| nginx-test       | 192.168.189.91:80
-  +--->| HAProxy +------------------->| nginx-srv    +-----+     | employee-test x2 |
-       |         |                    |              |     |     |                  |
+  |    |         |     192.168.122.18:30001          |     |     |                  |
+  +--->| HAProxy +------------------->| nginx-srv    +-----+     | employee-test x3 |
+       |         |                    |              |     |     | mongo-test       |
        |         +------------+       +--------------+     |     +------------------+
        +---------+            |       +----worker2---+     |     +----worker2-------+
-       192.168.11.27          |       |              |     |---->| nginx-test       | 192.168.235.150:80
-                              +------>| nginx-srv    +-----+     | employee-test x2 |
-                      192.168.122.219:30001          |           | mongo-test       |
+       192.168.11.27          |       |              |     |     |                  |
+                              +------>| nginx-srv    +-----+---->| nginx-test x2    | 192.168.189.127:80, 192.168.189.65:80
+                      192.168.122.219:30001          |           | employee-test x1 |
                                       +--------------+           +------------------+
 
-
-            <=======================>             <=============>
+               <=======================>           <=============>
 
   [haproxy-nodeport.cfg]                           [nginx-nodeport.yaml]
   server proxy-server1 192.168.122.183:30001         kind: Service
@@ -89,50 +88,42 @@ $ kubectl apply -f mongo.yaml
 service/mongo-test created
 deployment.apps/mongo-test created
 
-$ kubectl get pods
-NAME                          READY   STATUS              RESTARTS   AGE
-mongo-test-67f5dd84b7-4rssk   0/1     ContainerCreating   0          8s
-
-$ kubectl get pods
-NAME                          READY   STATUS    RESTARTS   AGE
-mongo-test-67f5dd84b7-4rssk   1/1     Running   0          84s
-
-$ kubectl get services
-NAME         TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)     AGE
-kubernetes   ClusterIP   10.96.0.1     <none>        443/TCP     4d17h
-mongo-srv    ClusterIP   10.98.25.12   <none>        27017/TCP   99s
-
-$ kubectl describe pods mongo-test-67f5dd84b7-4rssk
-Name:         mongo-test-67f5dd84b7-4rssk
+$ $ kubectl describe pods mongo-test
+Name:         mongo-test-67f5dd84b7-bpn4w
 Namespace:    default
 Priority:     0
-Node:         worker2/192.168.122.219
-Start Time:   Fri, 17 Sep 2021 14:12:54 +0900
+Node:         worker1/192.168.122.18
+Start Time:   Tue, 21 Sep 2021 23:49:03 +0900
 Labels:       pod-template-hash=67f5dd84b7
               run=mongo-test
-Annotations:  cni.projectcalico.org/containerID: 62146e8b4331d812e0963a8642b6708ed69f4f358c203936ecb50c48cbf18012
-              cni.projectcalico.org/podIP: 192.168.189.66/32
-              cni.projectcalico.org/podIPs: 192.168.189.66/32
+Annotations:  cni.projectcalico.org/containerID: 5083c61ec3035aad1c03f87344309416ab6802502453fb0cad15b3a49a3392a1
+              cni.projectcalico.org/podIP: 192.168.235.183/32
+              cni.projectcalico.org/podIPs: 192.168.235.183/32
 Status:       Running
-IP:           192.168.189.66
+IP:           192.168.235.183
 IPs:
-  IP:           192.168.189.66
+  IP:           192.168.235.183
 Controlled By:  ReplicaSet/mongo-test-67f5dd84b7
 Containers:
   mongodb:
-    Container ID:   docker://4a1d737a5f82db4ccd132ef06fa7c2acaa0cf5a17cf7be5b44018f2716570c67
+    Container ID:   docker://71fdfd1de68a1835d8cfe2c1b518fcf9daa821c4aa6c399be0371bb436594118
     Image:          docker.io/mongo
-    Image ID:       docker-pullable://mongo@sha256:58ea1bc09f269a9b85b7e1fae83b7505952aaa521afaaca4131f558955743842
+    Image ID:       docker-pullable://mongo@sha256:ae1ae34d5e470af7b1a5ca26565e913eec5f9f645701036e6d6860dfcacfa116
     Port:           27017/TCP
     Host Port:      0/TCP
     State:          Running
-      Started:      Fri, 17 Sep 2021 14:14:16 +0900
+      Started:      Wed, 22 Sep 2021 08:07:49 +0900
+    Last State:     Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Tue, 21 Sep 2021 23:49:08 +0900
+      Finished:     Wed, 22 Sep 2021 00:06:46 +0900
     Ready:          True
-    Restart Count:  0
+    Restart Count:  1
     Environment:    <none>
     Mounts:
       /data/db from mongo-data (rw)
-      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-lprzv (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-dgcrd (ro)
 Conditions:
   Type              Status
   Initialized       True 
@@ -144,7 +135,7 @@ Volumes:
     Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
     ClaimName:  mongo-pvc
     ReadOnly:   false
-  kube-api-access-lprzv:
+  kube-api-access-dgcrd:
     Type:                    Projected (a volume that contains injected data from multiple sources)
     TokenExpirationSeconds:  3607
     ConfigMapName:           kube-root-ca.crt
@@ -155,13 +146,18 @@ Node-Selectors:              <none>
 Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
                              node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
 Events:
-  Type    Reason     Age    From               Message
-  ----    ------     ----   ----               -------
-  Normal  Scheduled  6m14s  default-scheduler  Successfully assigned default/mongo-test-67f5dd84b7-4rssk to worker2
-  Normal  Pulling    6m13s  kubelet            Pulling image "docker.io/mongo"
-  Normal  Pulled     4m56s  kubelet            Successfully pulled image "docker.io/mongo" in 1m16.668285964s
-  Normal  Created    4m52s  kubelet            Created container mongodb
-  Normal  Started    4m52s  kubelet            Started container mongodb
+  Type    Reason          Age                From               Message
+  ----    ------          ----               ----               -------
+  Normal  Scheduled       8h                 default-scheduler  Successfully assigned default/mongo-test-67f5dd84b7-bpn4w to worker1
+  Normal  Pulling         8h                 kubelet            Pulling image "docker.io/mongo"
+  Normal  Pulled          8h                 kubelet            Successfully pulled image "docker.io/mongo" in 2.694415017s
+  Normal  Created         8h                 kubelet            Created container mongodb
+  Normal  Started         8h                 kubelet            Started container mongodb
+  Normal  SandboxChanged  11m (x2 over 12m)  kubelet            Pod sandbox changed, it will be killed and re-created.
+  Normal  Pulling         11m                kubelet            Pulling image "docker.io/mongo"
+  Normal  Pulled          11m                kubelet            Successfully pulled image "docker.io/mongo" in 3.865717695s
+  Normal  Created         11m                kubelet            Created container mongodb
+  Normal  Started         11m                kubelet            Started container mongodb
 ```
 
 # 4. Check if mongoDB is running properly
@@ -183,26 +179,23 @@ spec:
 EOF
 pod/dnsutils created
 
-$ kubectl get pods
-NAME                          READY   STATUS              RESTARTS   AGE
-dnsutils                      0/1     ContainerCreating   0          7s
-mongo-test-67f5dd84b7-4rssk   1/1     Running             0          3m26s
-
-$ kubectl get pods
-NAME                          READY   STATUS    RESTARTS   AGE
-dnsutils                      1/1     Running   0          93s
-mongo-test-67f5dd84b7-4rssk   1/1     Running   0          4m52s
-
-$ kubectl exec -it dnsutils -- /bin/bash
-root@dnsutils:/# 
 root@dnsutils:/# nslookup mongo-test
 Server:		10.96.0.10
 Address:	10.96.0.10#53
 
-Name:	mongo-test.default.svc.cluster.local
-Address: 10.98.25.12
+** server can't find mongo-test: NXDOMAIN
 
 root@dnsutils:/# curl mongo-test:27017
+curl: (6) Could not resolve host: mongo-test
+
+root@dnsutils:/# nslookup mongo-srv 
+Server:		10.96.0.10
+Address:	10.96.0.10#53
+
+Name:	mongo-srv.default.svc.cluster.local
+Address: 10.110.87.184
+
+root@dnsutils:/# curl mongo-srv:27017
 It looks like you are trying to access MongoDB over HTTP on the native driver port.
 ```
 
@@ -230,17 +223,11 @@ employee-test-85cf649cf6-hx2jh   1/1     Running   0          2m30s
 employee-test-85cf649cf6-hz9hz   1/1     Running   0          2m30s
 mongo-test-67f5dd84b7-4rssk      1/1     Running   0          28m
 
-$ kubectl get services
-NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE
-employee-srv    ClusterIP   10.97.233.212   <none>        5001/TCP,5000/TCP   2m40s
-kubernetes      ClusterIP   10.96.0.1       <none>        443/TCP             4d18h
-mongo-srv       ClusterIP   10.98.25.12     <none>        27017/TCP           28m
-
 $ kubectl describe pod employee-test |grep ^Node:
 Node:         worker1/192.168.122.18
 Node:         worker2/192.168.122.219
 Node:         worker1/192.168.122.18
-Node:         worker2/192.168.122.219
+Node:         worker1/192.168.122.18
 ```
 
 # 6. Check if Employee web app is running properly
@@ -287,25 +274,26 @@ configmap/nginx-config created
 # 8. Create depolyment of Nginx with 2 repricas
 ```
 $ kubectl apply -f nginx-nodeport.yaml 
+
 $ kubectl describe pod nginx-test |grep ^Node:
-Node:         worker1/192.168.122.18
+Node:         worker2/192.168.122.219
 Node:         worker2/192.168.122.219
 
-$ kubectl describe services nginx-test
-Name:                     nginx-test
+$ $ kubectl describe services nginx-srv
+Name:                     nginx-srv
 Namespace:                default
-Labels:                   run=nginx-test
+Labels:                   run=nginx-srv
 Annotations:              <none>
 Selector:                 run=nginx-test
 Type:                     NodePort
 IP Family Policy:         SingleStack
 IP Families:              IPv4
-IP:                       10.110.198.181
-IPs:                      10.110.198.181
+IP:                       10.103.147.112
+IPs:                      10.103.147.112
 Port:                     http  8080/TCP
 TargetPort:               80/TCP
 NodePort:                 http  30001/TCP
-Endpoints:                192.168.189.91:80,192.168.235.150:80
+Endpoints:                192.168.189.127:80,192.168.189.65:80
 Session Affinity:         None
 External Traffic Policy:  Cluster
 Events:                   <none>
@@ -327,13 +315,14 @@ https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%2020
 
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2008-27-54.png
 ```
-$ kubectl describe services nginx-test | grep Endpoint
-Endpoints:                192.168.189.91:80,192.168.235.150:80
+$ kubectl describe services nginx-srv | grep Endpoint
+Endpoints:                192.168.189.127:80,192.168.189.65:80
 ```
 ```
-$ kubectl exec -it nginx-test-85c6647877-khfcc -- /bin/bash
-root@nginx-test-85c6647877-khfcc:/# hostname -i
-192.168.189.91
+$ kubectl exec -it nginx-test-85c6647877-627k7 -- hostname -i
+192.168.189.127
+$ kubectl exec -it nginx-test-85c6647877-wwqvz -- hostname -i
+192.168.189.65
 ```
 
 # 9-3. Nodeport IP address and ports ( = Node's IP address + 30001)
@@ -348,11 +337,11 @@ https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%2020
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-35.png
 ```
 $ kubectl get services
-NAME            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
-employee-srv    ClusterIP   10.104.136.13    <none>        5001/TCP,5000/TCP   129m
-kubernetes      ClusterIP   10.96.0.1        <none>        443/TCP             3d12h
-mongo-srv       ClusterIP   10.102.85.2      <none>        27017/TCP           130m
-nginx-srv       NodePort    10.110.198.181   <none>        8080:30001/TCP      14m
+NAME           TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+employee-srv   ClusterIP   10.102.92.11     <none>        5001/TCP,5000/TCP   8h
+kubernetes     ClusterIP   10.96.0.1        <none>        443/TCP             8h
+mongo-srv      ClusterIP   10.110.87.184    <none>        27017/TCP           8h
+nginx-srv      NodePort    10.103.147.112   <none>        8080:30001/TCP      8h
 ```
 
 # 10. Expose Proxy address for outside world using HAproxy on Host Machine
