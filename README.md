@@ -311,9 +311,9 @@ $ kubectl describe nodes| grep -e Hostname -e InternalIP
   Hostname:    worker2
 ```
 # 9-2. Endpoint IP address of Nginx's service ( = Pod's IP address)
-https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2008-27-46.png
+https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-22%2008-37-18.png
 
-https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2008-27-54.png
+https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-22%2008-37-26.png
 ```
 $ kubectl describe services nginx-srv | grep Endpoint
 Endpoints:                192.168.189.127:80,192.168.189.65:80
