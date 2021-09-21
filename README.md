@@ -11,7 +11,7 @@ https://github.com/developer-onizuka/gpu-operator3
 |  | Replicas | ClusterIP | ExternalIP | Storage | How to access from outside |
 | --- | --- | --- | --- | --- | --- |
 | HAProxy | N/A | N/A | N/A | N/A | Blowse Host's IP address | 
-| Nginx | 2 | resolved DNS | See #9-3 or #9-4 | Ephemeral | N/A |
+| Nginx | 2 | resolved DNS | See #10 | Ephemeral | N/A |
 | Employee Web App | 4 | resolved DNS | no | Ephemeral | N/A |
 | mongoDB | 1 | resolved DNS | no | Persistent | N/A |
 
