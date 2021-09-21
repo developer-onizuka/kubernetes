@@ -310,7 +310,37 @@ $ kubectl describe nodes| grep -e Hostname -e InternalIP
   InternalIP:  192.168.122.219
   Hostname:    worker2
 ```
-# 9-2. Endpoint IP address of Nginx's service ( = Pod's IP address)
+# 9-2. Cluster IP
+```
+$ kubectl exec -it dnsutils -- /bin/bash
+root@dnsutils:/# nslookup nginx-srv
+Server:		10.96.0.10
+Address:	10.96.0.10#53
+
+Name:	nginx-srv.default.svc.cluster.local
+Address: 10.103.147.112
+
+root@dnsutils:/# curl nginx-srv:80
+curl: (7) Failed to connect to nginx-srv port 80: Connection timed out
+
+root@dnsutils:/# curl nginx-srv:8080  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> - Employee</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+</head>
+
+... snip ...
+
+</body>
+</html>
+```
+
+# 9-3. Endpoint IP address of Nginx's service ( = Pod's IP address)
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-22%2008-37-18.png
 
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-22%2008-37-26.png
@@ -325,7 +355,7 @@ $ kubectl exec -it nginx-test-85c6647877-wwqvz -- hostname -i
 192.168.189.65
 ```
 
-# 9-3. Nodeport IP address and ports ( = Node's IP address + 30001)
+# 9-4. NodePort IP address and ports ( = Node's IP address + 30001)
 
 192.168.122.183:30001 --> 
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-21.png
