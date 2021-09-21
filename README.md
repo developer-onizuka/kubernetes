@@ -15,6 +15,26 @@ https://github.com/developer-onizuka/kubernetes_vagrant
 | Employee Web App | 4 | resolved DNS | no | Ephemeral | N/A |
 | mongoDB | 1 | resolved DNS | no | Persistent | N/A |
 
+```
+                                     <Service>                 <Pod>
+                                    
+                                    +---master----+           +---master----+
+                    192.168.122.183 |             |           |             | 
+iPhone,etc                  +------>|  Nginx Srv  +-----+     |             |
+|                           |       |             |     |     |             |
+|    +---------+            |       +-------------+     |     +-------------+
+|    |         +------------+       +---worker2---+     |     +---worker1---+
+|    |         |    192.168.122.18  |             |     |---->| Nginx       |
++--->+ HAProxy +------------------->|  Nginx Srv  +-----+     | Employee x2 |
+     |         |                    |             |     |     |             |
+     |         +------------+       +-------------+     |     +-------------+
+     +---------+            |       +---worker2---+     |     +---worker2---+
+     192.168.11.27          |       |             |     |---->| Nginx       |
+                            +------>|  Nginx Srv  +-----+     | Employee x2 |
+                    192.168.122.219 |             |           | mongoDB     |
+                                    +-------------+           +-------------+
+```
+
 # 1. git clone this project
 ```
 $ git clone https://github.com/developer-onizuka/kubernetes.git
