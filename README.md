@@ -309,6 +309,11 @@ https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%2020
 $ kubectl describe services nginx-test | grep Endpoint
 Endpoints:                192.168.189.91:80,192.168.235.150:80
 ```
+```
+$ kubectl exec -it nginx-test-85c6647877-khfcc -- /bin/bash
+root@nginx-test-85c6647877-khfcc:/# hostname -i
+192.168.189.91
+```
 
 # 9-3. Nodeport IP address and ports ( = Node's IP address + 30001)
 
