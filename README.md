@@ -301,7 +301,7 @@ $ kubectl describe nodes| grep -e Hostname -e InternalIP
   InternalIP:  192.168.122.219
   Hostname:    worker2
 ```
-# 9-2. Endpoint IP address of Nginx's service
+# 9-2. Endpoint IP address of Nginx's service ( = Pod's IP address)
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2008-27-46.png
 
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2008-27-54.png
@@ -310,7 +310,7 @@ $ kubectl describe services nginx-test | grep Endpoint
 Endpoints:                192.168.189.91:80,192.168.235.150:80
 ```
 
-# 9-3. Nodeport IP address and ports
+# 9-3. Nodeport IP address and ports ( = Node's IP address + 30001)
 
 192.168.122.183:30001 --> 
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-21.png
