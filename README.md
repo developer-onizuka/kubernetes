@@ -310,11 +310,15 @@ $ kubectl describe services nginx-test | grep Endpoint
 Endpoints:                192.168.189.91:80,192.168.235.150:80
 ```
 
-# 9-3. Nodeport IP address
+# 9-3. Nodeport IP address and ports
+
+192.168.122.183:30001
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-21.png
 
+192.168.122.18:30001
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-29.png
 
+192.168.122.219:30001
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-35.png
 ```
 $ kubectl get services
