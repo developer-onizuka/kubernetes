@@ -389,7 +389,7 @@ listen http-in
     server proxy-server2 192.168.122.18:30001 
     server proxy-server3 192.168.122.219:30001
 EOF
-$ sudo docker run -itd --rm --name haproxy -p 80:80 -v $(pwd)/haproxy.cfg:/usr/local/etc/haproxy/haproxy-nodeport.cfg:ro haproxy:1.8
+$ sudo docker run -itd --rm --name haproxy -p 80:80 -v $(pwd)/haproxy-nodeport.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro haproxy:1.8
 ```
 
 # 11. Dash board
