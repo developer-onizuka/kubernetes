@@ -10,8 +10,8 @@ https://github.com/developer-onizuka/gpu-operator3
 # 0-1. Workloads
 |  | Replicas | ClusterIP | ExternalIP | Storage | How to access from outside |
 | --- | --- | --- | --- | --- | --- |
-| HAProxy | N/A | N/A | N/A | N/A | Blowse master-node's IP address | 
-| Nginx | 2 | resolved DNS | 192.168.1.10 | Ephemeral | N/A |
+| HAProxy | N/A | N/A | N/A | N/A | Blowse Host's IP address | 
+| Nginx | 2 | resolved DNS | See #9-3 or #9-4 | Ephemeral | N/A |
 | Employee Web App | 4 | resolved DNS | no | Ephemeral | N/A |
 | mongoDB | 1 | resolved DNS | no | Persistent | N/A |
 
@@ -347,8 +347,13 @@ mongo-test      ClusterIP   10.102.85.2      <none>        27017/TCP           1
 nginx-test      NodePort    10.110.198.181   <none>        8080:30001/TCP      14m
 ```
 
-# 10. HAproxy
+# 10. HAproxy on Host Machine
 You should choose etheir #10-1 or #10-2 according to #8's choise.
+Docker.io should be installed on Host Machine, prior to this step.
+
+The following picture is taken on my smart phone involved in same network as Host Machine (192.168.11.xx).
+
+https://github.com/developer-onizuka/kubernetes/blob/main/image_123986672.JPG
 
 # 10-1. Expose Proxy address for outside world (LoadBalancer)
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-17%2018-16-40.png
