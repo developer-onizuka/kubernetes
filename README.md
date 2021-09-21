@@ -1,5 +1,5 @@
-# 0. Create one master-node and two worker-nodes in the cluster
-https://github.com/developer-onizuka/gpu-operator3
+# 0. Create one master-node and two worker-nodes in the cluster from scratch or using vagrant below
+https://github.com/developer-onizuka/kubernetes_vagrant
 
 |  | CPU | Memory | GPU | GPU Driver |
 | --- | --- | --- | --- | --- |
