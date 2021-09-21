@@ -16,38 +16,44 @@ https://github.com/developer-onizuka/kubernetes_vagrant
 | mongoDB | 1 | resolved DNS | no | Persistent | N/A |
 
 ```
-                                     <Service>                 <Pod>
-                                    
-                                    +----master----+           +----maste---------+
-                    192.168.122.183 |              |           |                  | 
-iPhone,etc                  +------>| nginx-srv    +-----+     |                  |
-|                           |       |              |     |     |                  |
-|    +---------+            |       +--------------+     |     +------------------+
-|    |         +------------+       +----worker2---+     |     +----worker1-------+
-|    |         |    192.168.122.18  |              |     |---->| nginx-test       | 192.168.189.91:80
-+--->+ HAProxy +------------------->| nginx-srv    +-----+     | employee-test x2 |
-     |         |                    |              |     |     |                  |
-     |         +------------+       +--------------+     |     +------------------+
-     +---------+            |       +----worker2---+     |     +----worker2-------+
-     192.168.11.27          |       |              |     |---->| nginx-test       | 192.168.235.150:80
-                            +------>| nginx-srv    +-----+     | employee-test x2 |
-                    192.168.122.219 |              |           | mongo-test       |
-                                    +--------------+           +------------------+
+Type=NodePort
+                                       <Service>                 <Pod>
+                                      
+                                      +----master----+           +----maste---------+
+                      192.168.122.183 |              |           |                  | 
+iPhone,etc                    +------>| nginx-srv    +-----+     |                  |
+  |                           |       |              |     |     |                  |
+  |    +---------+            |       +--------------+     |     +------------------+
+  |    |         +------------+       +----worker2---+     |     +----worker1-------+
+  |    |         |    192.168.122.18  |              |     |---->| nginx-test       | 192.168.189.91:80
+  +--->| HAProxy +------------------->| nginx-srv    +-----+     | employee-test x2 |
+       |         |                    |              |     |     |                  |
+       |         +------------+       +--------------+     |     +------------------+
+       +---------+            |       +----worker2---+     |     +----worker2-------+
+       192.168.11.27          |       |              |     |---->| nginx-test       | 192.168.235.150:80
+                              +------>| nginx-srv    +-----+     | employee-test x2 |
+                      192.168.122.219 |              |           | mongo-test       |
+                                      +--------------+           +------------------+
 
 
-                <==================>               <===========>
+            <=======================>             <=============>
+
   [haproxy-nodeport.cfg]                           [nginx-nodeport.yaml]
-  server proxy-server1 192.168.122.183:30001         spec:
-  server proxy-server2 192.168.122.18:30001            type: NodePort
-  server proxy-server3 192.168.122.219:30001           ports:
-                                                       - port: 8080
-                                                         targetPort: 80
-                                                         protocol: TCP
-                                                         name: http
-                                                         nodePort: 30001
-                                                       selector:
-                                                         run: nginx-test
-                             
+  server proxy-server1 192.168.122.183:30001         kind: Service
+  server proxy-server2 192.168.122.18:30001          metadata:
+  server proxy-server3 192.168.122.219:30001           name: nginx-srv
+                                                       labels:
+                                                         run: nginx-srv
+                                                     spec:
+                                                       type: NodePort
+                                                        ports:
+                                                        - port: 8080
+                                                          targetPort: 80
+                                                          protocol: TCP
+                                                          name: http
+                                                          nodePort: 30001
+                                                        selector:
+                                                          run: nginx-test
 ```
 
 # 1. git clone this project
