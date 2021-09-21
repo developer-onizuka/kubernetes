@@ -17,7 +17,7 @@ https://github.com/developer-onizuka/kubernetes_vagrant
 
 ```
 Type=NodePort
-                                       <Service>                 <Pod>
+       <HAproxy>                      <Service>                  <Pod>
                                       
                                       +----master----+           +----maste---------+
                       192.168.122.183:30001          |           |                  | 
