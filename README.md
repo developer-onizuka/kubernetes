@@ -243,7 +243,10 @@ EOF
 $ kubectl create configmap nginx-config --from-file=default.conf
 configmap/nginx-config created
 ```
-# 8. Create depolyment of Nginx with 2 repricas (LoadBalancer)
+# 8. Deployment of Nginx
+You can choose #8-1 or #8-2.
+
+# 8-1. Create depolyment of Nginx with 2 repricas (LoadBalancer)
 ```
 $ kubectl apply -f nginx.yaml 
 $ kubectl describe pod nginx-test |grep ^Node:
@@ -271,7 +274,7 @@ External Traffic Policy:  Cluster
 Events:                   <none>
 ```
 
-# 8-1. Create depolyment of Nginx with 2 repricas (NodePort)
+# 8-2. Create depolyment of Nginx with 2 repricas (NodePort)
 ```
 $ kubectl apply -f nginx-nodeport.yaml 
 $ kubectl describe pod nginx-test |grep ^Node:
@@ -330,6 +333,11 @@ nginx-test      LoadBalancer   10.109.37.19    192.168.122.183   8080:31952/TCP 
 ```
 
 # 9-4. External IP address (NodePort)
+https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-21.png
+
+https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-29.png
+
+https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-35.png
 ```
 $ kubectl get services
 NAME            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
@@ -339,7 +347,10 @@ mongo-test      ClusterIP   10.102.85.2      <none>        27017/TCP           1
 nginx-test      NodePort    10.110.198.181   <none>        8080:30001/TCP      14m
 ```
 
-# 10. Expose Proxy address for outside world (LoadBalancer)
+# 10. HAproxy
+You should choose etheir #10-1 or #10-2 according to #8's choise.
+
+# 10-1. Expose Proxy address for outside world (LoadBalancer)
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-17%2018-16-40.png
 ```
 $ cat <<EOF > haproxy.cfg 
@@ -359,8 +370,8 @@ EOF
 $ sudo docker run -itd --rm --name haproxy -p 80:80 -v $(pwd)/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro haproxy:1.8
 ```
 
-# 10-1. Expose Proxy address for outside world (NodePort)
-https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-17%2018-16-40.png
+# 10-2. Expose Proxy address for outside world (NodePort)
+https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-55.png
 ```
 $ cat <<EOF > haproxy-nodeport.cfg 
 global
