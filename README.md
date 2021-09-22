@@ -305,7 +305,7 @@ Events:                   <none>
 | --- | --- | --- | --- | --- |
 | Node's IP | Each Master/Worker | 192.168.122.183, etc | between Host Machine and Master/workers | Human operations |
 | Cluster IP | Each Service | 10.103.147.112:8080, etc | between Services | Resolved by kube-dns(10.96.0.10) and communication between Pods inside the Cluster |
-| Endpoint IP | Each Container | 192.168.189.127:80, etc | between Service and Containers | Resides in Container, but we don't use it directly as communication between containers. Bound for each service. |
+| Endpoint IP | Each Container | 192.168.189.127:80, etc | between Service and Containers | Resides in Container, but we don't use it directly as communication between containers. Bound for each service by selector logic of API server. You can confirm it "kubectl get endpoints" |
 | NodePort IP | NodePorted Service | 192.168.122.183:30001, etc | between HAProxy and Master/Workers | Web access to k8s cluster thru HAProxy |
 
 # 9-1. Node's IP address
@@ -361,6 +361,15 @@ $ kubectl exec -it nginx-test-85c6647877-627k7 -- hostname -i
 192.168.189.127
 $ kubectl exec -it nginx-test-85c6647877-wwqvz -- hostname -i
 192.168.189.65
+```
+
+```
+kubectl get endpoints
+NAME           ENDPOINTS                                                                 AGE
+employee-srv   192.168.189.67:5001,192.168.189.78:5001,192.168.189.83:5001 + 5 more...   31h
+kubernetes     192.168.122.183:6443                                                      31h
+mongo-srv      192.168.189.79:27017                                                      31h
+nginx-srv      192.168.189.127:80,192.168.189.65:80                                      31h
 ```
 
 # 9-4. NodePort IP address and ports ( = Node's IP address + 30001)
