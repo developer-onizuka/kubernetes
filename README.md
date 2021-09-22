@@ -303,10 +303,10 @@ Events:                   <none>
 
 | | Who has? | IP address | Connection | Purpose |
 | --- | --- | --- | --- | --- |
-| Node's IP | Each Master/Worker | 192.168.122.183, etc | between Host Machine and Master/workers | Human operations |
+| Internal IP | Each Master/Worker | 192.168.122.183, etc | between Host Machine and Master/workers | Human operations |
 | Cluster IP | Each Service | 10.103.147.112:8080, etc | between Services | Resolved by kube-dns(10.96.0.10) and communication between Pods inside the Cluster |
-| Endpoint IP | Each Container | 192.168.189.127:80, etc | between Service and Containers | Resides in Container, but we don't use it directly as communication between containers. Bound for each service by selector logic of API server. You can confirm it "kubectl get endpoints" |
-| NodePort IP | NodePorted Service | 192.168.122.183:30001, etc | between HAProxy and Master/Workers | Web access to k8s cluster thru HAProxy |
+| Endpoint | Each Container | 192.168.189.127:80, etc | between Service and Containers | Resides in Container, but we don't use it directly as communication between containers. Bound for each service by selector logic of API server. You can confirm it "kubectl get endpoints" |
+| NodePort | NodePorted Service | 192.168.122.183:30001, etc | between HAProxy and Master/Workers | Web access to k8s cluster thru HAProxy |
 
 # 9-1. Node's IP address
 ```
@@ -348,7 +348,7 @@ root@dnsutils:/# curl nginx-srv:8080
 </html>
 ```
 
-# 9-3. Endpoint IP address of Nginx's service ( = Pod's IP address)
+# 9-3. Endpoint of service ( = Pod's IP address + each port(80, 5001, 27017 or 8080))
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-22%2008-37-18.png
 
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-22%2008-37-26.png
@@ -372,7 +372,7 @@ mongo-srv      192.168.189.79:27017                                             
 nginx-srv      192.168.189.127:80,192.168.189.65:80                                      31h
 ```
 
-# 9-4. NodePort IP address and ports ( = Node's IP address + 30001)
+# 9-4. NodePort ( = Internal IP address + 30001)
 
 192.168.122.183:30001 --> 
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-21.png
