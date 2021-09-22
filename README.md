@@ -305,6 +305,7 @@ Events:                   <none>
 | --- | --- | --- | --- | --- |
 | Internal IP | Each Master/Worker | 192.168.122.183, etc | between Host Machine and Master/workers | Human operations |
 | Cluster IP | Each Service | 10.103.147.112:8080, etc | between Services | Resolved by kube-dns(10.96.0.10) and communication between Pods inside the Cluster |
+| Container IP | Each Container | 192.168.189.127, etc | between containers | Human operations |
 | Endpoint | Each Container | 192.168.189.127:80, etc | between Service and Containers | Resides in Container, but we don't use it directly as communication between containers. Bound for each service by selector logic of API server. You can confirm it "kubectl get endpoints" |
 | NodePort | NodePorted Service | 192.168.122.183:30001, etc | between HAProxy and Master/Workers | Web access to k8s cluster thru HAProxy |
 
@@ -348,7 +349,21 @@ root@dnsutils:/# curl nginx-srv:8080
 </html>
 ```
 
-# 9-3. Endpoint of service ( = Pod's IP address + each port(80, 5001, 27017 or 8080))
+# 9-3. Container IP
+```
+$ kubectl get pods --output=wide
+NAME                            READY   STATUS    RESTARTS      AGE     IP                NODE      NOMINATED NODE   READINESS GATES
+dnsutils                        1/1     Running   0             8m37s   192.168.235.187   worker1   <none>           <none>
+employee-test-f49b56687-4gc8d   1/1     Running   1 (11h ago)   11h     192.168.189.67    worker2   <none>           <none>
+employee-test-f49b56687-hg457   1/1     Running   1 (11h ago)   11h     192.168.189.78    worker2   <none>           <none>
+employee-test-f49b56687-vtnvr   1/1     Running   1 (11h ago)   11h     192.168.189.91    worker2   <none>           <none>
+employee-test-f49b56687-x7q76   1/1     Running   1 (11h ago)   11h     192.168.189.83    worker2   <none>           <none>
+mongo-test-67f5dd84b7-mcw8t     1/1     Running   1 (11h ago)   11h     192.168.189.79    worker2   <none>           <none>
+nginx-test-85c6647877-7n844     1/1     Running   3 (11h ago)   11h     192.168.189.127   worker2   <none>           <none>
+nginx-test-85c6647877-bfqv7     1/1     Running   3 (14m ago)   12h     192.168.189.65    worker2   <none>           <none>
+```
+
+# 9-4. Endpoint of service ( = Pod's IP address + each port(80, 5001, 27017 or 8080))
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-22%2008-37-18.png
 
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-22%2008-37-26.png
@@ -372,7 +387,7 @@ mongo-srv      192.168.189.79:27017                                             
 nginx-srv      192.168.189.127:80,192.168.189.65:80                                      31h
 ```
 
-# 9-4. NodePort ( = Internal IP address + 30001)
+# 9-5. NodePort ( = Internal IP address + 30001)
 
 192.168.122.183:30001 --> 
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-21.png
