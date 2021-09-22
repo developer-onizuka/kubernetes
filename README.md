@@ -301,12 +301,12 @@ Events:                   <none>
 
 # 9. Check each IP
 
-| | IP address | Connection | Purpose |
-| --- | --- | --- | --- |
-| Node's IP | 192.168.122.183, etc | between Host Machine and Master/workers | Human operations |
-| Cluster IP | 10.103.147.112:8080, etc | between Services | Resolved by kube-dns(10.96.0.10) and communication between Pods inside the Cluster |
-| Endpoint IP | 192.168.189.127:80, etc | between Service and Containers | Resides in Container, but we don't use it as communication between containers|
-| NodePort IP | 192.168.122.183:30001, etc | between HAProxy and Master/Workers | Web access to k8s cluster thru HAProxy |
+| | Who has? | IP address | Connection | Purpose |
+| --- | --- | --- | --- | --- |
+| Node's IP | Each Master/Worker | 192.168.122.183, etc | between Host Machine and Master/workers | Human operations |
+| Cluster IP | Each Service | 10.103.147.112:8080, etc | between Services | Resolved by kube-dns(10.96.0.10) and communication between Pods inside the Cluster |
+| Endpoint IP | Each Container | 192.168.189.127:80, etc | between Service and Containers | Resides in Container, but we don't use it as communication between containers|
+| NodePort IP | NodePoted Service | 192.168.122.183:30001, etc | between HAProxy and Master/Workers | Web access to k8s cluster thru HAProxy |
 
 # 9-1. Node's IP address
 ```
