@@ -300,6 +300,14 @@ Events:                   <none>
 ```
 
 # 9. Check each IP
+
+| | IP address | Connection | Purpose |
+| --- | --- | --- | --- |
+|Node's IP | 192.168.122.183,etc | between HAproxy and Master/workers | Reprentative IP address of Cluster |
+
+
+
+
 # 9-1. Node's IP address
 ```
 $ kubectl describe nodes| grep -e Hostname -e InternalIP
