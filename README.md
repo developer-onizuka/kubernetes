@@ -20,12 +20,12 @@ Type=NodePort
        <HAproxy>                      <Service>                  <Pod> ; As a Selector of service
                                       
                                       +----master----+           +----maste---------+
-                      192.168.122.183:30001          |           |                  | 
+                    192.168.122.183:30001    10.103.147.112:8080 |                  | 
 iPhone,etc                    +------>| nginx-srv    +-----+     |                  |
   |                           |       |              |     |     |                  |
   |    +---------+            |       +--------------+     |     +------------------+
   |    |         +------------+       +----worker2---+     |     +----worker1-------+
-  |    |         |     192.168.122.18:30001          |     |     |                  |
+  |    |         |  192.168.122.18:30001             |     |     |                  |
   +--->| HAProxy +------------------->| nginx-srv    +-----+     | employee-test x3 |
        |         |                    |              |     |     | mongo-test       |
        |         +------------+       +--------------+     |     +------------------+
@@ -35,24 +35,24 @@ iPhone,etc                    +------>| nginx-srv    +-----+     |              
                       192.168.122.219:30001          |           | employee-test x1 |
                                       +--------------+           +------------------+
 
-               <=======================>           <=============>
+               <=======================>           <==============>
 
   [haproxy-nodeport.cfg]                           [nginx-nodeport.yaml]
-  server proxy-server1 192.168.122.183:30001         kind: Service
-  server proxy-server2 192.168.122.18:30001          metadata:
-  server proxy-server3 192.168.122.219:30001           name: nginx-srv
-                                                       labels:
-                                                         run: nginx-srv
-                                                     spec:
-                                                       type: NodePort
-                                                        ports:
-                                                        - port: 8080
-                                                          targetPort: 80
-                                                          protocol: TCP
-                                                          name: http
-                                                          nodePort: 30001
-                                                        selector:
-                                                          run: nginx-test
+  server proxy-server1 192.168.122.183:30001       kind: Service
+  server proxy-server2 192.168.122.18:30001        metadata:
+  server proxy-server3 192.168.122.219:30001         name: nginx-srv
+                                                     labels:
+                                                       run: nginx-srv
+                                                   spec:
+                                                     type: NodePort
+                                                      ports:
+                                                      - port: 8080
+                                                        targetPort: 80
+                                                        protocol: TCP
+                                                        name: http
+                                                        nodePort: 30001
+                                                      selector:
+                                                         run: nginx-test
 ```
 
 # 1. git clone this project
