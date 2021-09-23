@@ -350,12 +350,25 @@ nginx-test-85c6647877-z52x6     1/1     Running   0               76s   192.168.
 ```
 
 # 9-4. Endpoint of service ( = Pod's IP address + each port(80, 5001, 27017 or 8080))
-https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-22%2008-37-18.png
-
-https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-22%2008-37-26.png
 ```
 $ kubectl describe services nginx-srv | grep Endpoint
 Endpoints:                192.168.189.97:80,192.168.235.130:80
+
+$ curl 192.168.189.97:80 or 192.168.235.130:80
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> - Employee</title>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+</head>
+
+... snip ...
+
+</body>
+</html>
 ```
 ```
 $ kubectl exec -it nginx-test-85c6647877-bsfw7 -- hostname -i
