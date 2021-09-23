@@ -17,9 +17,9 @@ https://github.com/developer-onizuka/kubernetes_vagrant
 
 ```
 Type=NodePort
-       <HAproxy>                      <Service>                  <Pod> ; As a Selector of service
+       <HAproxy>                      <Service>                  <Pod> ; Mainly used as target of service
                                       
-                                      +----master----+           +----maste---------+
+                                      +----master----+           +----master--------+
                     192.168.122.183:30001    10.105.235.123:8080 |                  | 
 iPhone,etc                    +------>| nginx-srv    +-----+     |                  |
   |                           |       |              |     |     |                  |
