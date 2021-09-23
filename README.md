@@ -56,6 +56,7 @@ iPhone,etc                    +------>| +-----------+ |           |             
                                                       selector:
                                                          run: nginx-test  # 192.168.189.97, 192.168.235.130
 ```
+https://www.youtube.com/watch?v=y2bhV81MfKQ
 
 # 1. git clone this project
 ```
