@@ -310,6 +310,13 @@ $ kubectl describe nodes| grep -e Hostname -e InternalIP
 ```
 # 9-2. Cluster IP and Port
 ```
+$ kubectl get services
+NAME           TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+employee-srv   ClusterIP   10.108.88.205    <none>        5001/TCP,5000/TCP   79m
+kubernetes     ClusterIP   10.96.0.1        <none>        443/TCP             87m
+mongo-srv      ClusterIP   10.105.113.220   <none>        27017/TCP           79m
+nginx-srv      NodePort    10.105.235.123   <none>        8080:30001/TCP      79m
+
 $ kubectl exec -it dnsutils -- nslookup nginx-srv
 Server:		10.96.0.10
 Address:	10.96.0.10#53
