@@ -19,7 +19,9 @@ https://github.com/developer-onizuka/kubernetes_vagrant
 
 ```
 Type=NodePort
-       <HAproxy>                      <Service>                  <Pod> ; Mainly used as a target of service
+       <HAproxy>                      <Service>                   <Pod> 
+                                      ; is a group of Endpoints.   ; is mainly used as a target of service.
+                                      ; provides a stable VIP.     ; is behind a service, so that Pod can change.
                                       
                   master              +---------------+           +----master--------+
                   192.168.122.183:30001     10.105.235.123:8080   |                  | 
