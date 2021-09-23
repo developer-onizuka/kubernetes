@@ -351,7 +351,7 @@ nginx-test-85c6647877-bsfw7     1/1     Running   0               76s   192.168.
 nginx-test-85c6647877-z52x6     1/1     Running   0               76s   192.168.235.130   worker1   <none>           <none>
 ```
 
-# 9-4. Endpoint of service ( = Pod's IP address + each port(80, 5001, 27017 or 8080))
+# 9-4. Endpoint of service ( = Container's IP address + each port(80, 5001, 27017 or 8080))
 ```
 $ kubectl describe services nginx-srv | grep Endpoint
 Endpoints:                192.168.189.97:80,192.168.235.130:80
