@@ -46,13 +46,13 @@ iPhone,etc                    +------>| nginx-srv    +-----+     |              
                                                    spec:
                                                      type: NodePort
                                                       ports:
-                                                      - port: 8080      # 10.105.235.123:8080
-                                                        targetPort: 80  # 192.168.189.97:80,192.168.235.130:80
+                                                      - port: 8080        # 10.105.235.123:8080
+                                                        targetPort: 80    # 192.168.189.97:80, 192.168.235.130:80
                                                         protocol: TCP
                                                         name: http
-                                                        nodePort: 30001
+                                                        nodePort: 30001   # 192.168.122.183:30001,192.168.122.18:30001,192.168.122.219:30001
                                                       selector:
-                                                         run: nginx-test
+                                                         run: nginx-test  # 192.168.189.97, 192.168.235.130
 ```
 
 # 1. git clone this project
