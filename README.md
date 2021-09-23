@@ -1,3 +1,5 @@
+# This is my own understandings about k8s's inside networking based on my general knowledges of computer sciences. So please use this just for your informations.
+
 # 0. Create one master-node and two worker-nodes in the cluster from scratch or using vagrant below
 https://github.com/developer-onizuka/kubernetes_vagrant
 
