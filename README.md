@@ -38,9 +38,9 @@ iPhone,etc                    +------>| nginx-srv    +-----+     |              
                <=======================>           <==============>
 
   [haproxy-nodeport.cfg]                           [nginx-nodeport.yaml]
-  server proxy-server1 192.168.122.183:30001       kind: Service
+  server proxy-server1 192.168.122.183:30001       kind: Service          # Definition between 10.105.235.123:8080 and nginx-test:80
   server proxy-server2 192.168.122.18:30001        metadata:
-  server proxy-server3 192.168.122.219:30001         name: nginx-srv
+  server proxy-server3 192.168.122.219:30001         name: nginx-srv      # Name of the nginx service
                                                      labels:
                                                        run: nginx-srv
                                                    spec:
