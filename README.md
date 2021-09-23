@@ -19,37 +19,37 @@ https://github.com/developer-onizuka/kubernetes_vagrant
 
 ```
 Type=NodePort
-       <HAproxy>                      <Service>                   <Pod> 
-                                      ; is a group of Endpoints.   ; is mainly used as a target of service.
-                                      ; provides a stable VIP.     ; is behind a service, so that Pod can change.
-                                                                   ; gets associated with service thru "label" such as "run", "app" or "role" 
+       <HAproxy>                       <Service>                   <Pod> 
+                                       ; is a group of Endpoints.   ; is mainly used as a target of service.
+                                       ; provides a stable VIP.     ; is behind a service, so that Pod can change.
+                                                                    ; gets associated with service thru "label" such as "run", "app" or "role" 
                                       
-                  master              +---------------+           +----master--------+
-                  192.168.122.183:30001     10.105.235.123:8080   |                  | 
-iPhone,etc                    +------>| +-----------+ |           |                  |
-  |    +---------+            |       | |           | |           |                  |
-  |    |         +------------+       +-|           |-+           +------------------+  <Endpoint>
-  |    |         | worker1            +-|           |-+           +----worker1-------+
-  |    |         | 192.168.122.18:30001 |           | |           | mongo-test x1    | 192.168.235.189:27017
-  +--->| HAProxy +------------------->| | nginx-srv +-------+---->| nginx-test x1    | 192.168.235.130:80
-   192.168.11.27 |                    | | (iptable) | |     |     | employee-test x3 | 192.168.235.131:5001,192.168.235.190:5001, etc
-       |         +------------+       +-|           |-+     |     +------------------+
-       +---------+            |       +-|           |-+     |     +----worker2-------+ 
-                              |       | |           | |     |     |                  |
-                  worker2     +------>| |           | |     +---->| nginx-test x1    | 192.168.189.97:80
-                  192.168.122.219:30001 +-----------+ |           | employee-test x1 | 192.168.189.96:5001
-                                      +---------------+           +------------------+
+                 master                +---------------+           +----master--------+
+                 192.168.122.183:30001 |   10.105.235.123:8080     |                  | 
+iPhone,etc                    +------->| +-----------+ |           |                  |
+  |    +---------+            |        | |           | |           |                  |
+  |    |         +------------+        +-|           |-+           +------------------+  <Endpoint>
+  |    |         |worker1              +-|           |-+           +----worker1-------+
+  |    |         |192.168.122.18:30001 | |           | |           | mongo-test x1    | 192.168.235.189:27017
+  +--->| HAProxy +-------------------->| | nginx-srv +-------+---->| nginx-test x1    | 192.168.235.130:80
+   192.168.11.27 |                     | | (iptable) | |     |     | employee-test x3 | 192.168.235.131:5001,192.168.235.190:5001, etc
+       |         +------------+        +-|           |-+     |     +------------------+
+       +---------+            |        +-|           |-+     |     +----worker2-------+ 
+                              |        | |           | |     |     |                  |
+                 worker2      +------->| |           | |     +---->| nginx-test x1    | 192.168.189.97:80
+                 192.168.122.219:30001 | +-----------+ |           | employee-test x1 | 192.168.189.96:5001
+                                       +---------------+           +------------------+
 
-               <=======================>           <==============>
+                <=======================>           <==============>
 
-  [haproxy-nodeport.cfg]                           [nginx-nodeport.yaml]
-  server proxy-server1 192.168.122.183:30001       kind: Service          # Definition between 10.105.235.123:8080 and nginx-test:80
-  server proxy-server2 192.168.122.18:30001        metadata:
-  server proxy-server3 192.168.122.219:30001         name: nginx-srv      # Name of the nginx service
-                                                     labels:
-                                                       run: nginx-srv
-                                                   spec:
-                                                     type: NodePort
+   [haproxy-nodeport.cfg]                           [nginx-nodeport.yaml]
+   server proxy-server1 192.168.122.183:30001       kind: Service         # Definition between 10.105.235.123:8080 and nginx-test:80
+   server proxy-server2 192.168.122.18:30001        metadata:
+   server proxy-server3 192.168.122.219:30001         name: nginx-srv     # Name of the nginx service
+                                                      labels:
+                                                        run: nginx-srv
+                                                    spec:
+                                                      type: NodePort
                                                       ports:
                                                       - port: 8080        # 10.105.235.123:8080
                                                         targetPort: 80    # 192.168.189.97:80, 192.168.235.130:80
@@ -57,7 +57,7 @@ iPhone,etc                    +------>| +-----------+ |           |             
                                                         name: http
                                                         nodePort: 30001   # 192.168.122.183:30001,192.168.122.18:30001,192.168.122.219:30001
                                                       selector:
-                                                         run: nginx-test  # 192.168.189.97, 192.168.235.130
+                                                        run: nginx-test   # 192.168.189.97, 192.168.235.130
 ```
 https://www.youtube.com/watch?v=y2bhV81MfKQ
 
