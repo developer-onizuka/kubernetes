@@ -320,7 +320,7 @@ Address: 10.105.235.123
 $ kubectl exec -it curl -- curl nginx-srv:80
 curl: (7) Failed to connect to nginx-srv port 80: Connection timed out
 
-kubectl exec -it curl -- curl nginx-srv:8080  
+$ kubectl exec -it curl -- curl nginx-srv:8080  
 <!DOCTYPE html>
 <html lang="en">
 <head>
