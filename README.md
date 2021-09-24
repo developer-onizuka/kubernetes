@@ -307,10 +307,10 @@ Events:                   <none>
 
 # 9. Check each IP
 
-| | Who has? | IP address | Connection | Purpose |
+| | Resides at | IP address | Connection | Purpose |
 | --- | --- | --- | --- | --- |
 | Internal IP | Each Master/Worker | 192.168.122.183, etc | between Host Machine and Master/workers | Human operations |
-| Cluster IP and Port| Each Service | 10.105.235.123:8080, etc | between Services | Resolved by kube-dns(10.96.0.10) and communication between Pods inside the Cluster |
+| Cluster IP and Port| Each Service | 10.105.235.123:8080, etc | between Container and Service | Resolved by kube-dns(10.96.0.10) and communication between Pods inside the Cluster |
 | Container IP | Each Container | 192.168.189.97, etc | between Host Machine and container | Human operations, but we don't use it directly. Should use the command "kubectl exec -it podname -- /bin/bash". The podname is resolved to Container IP thru kubectl. |
 | Endpoint | Each Container | 192.168.189.97:80, etc | between Service and Containers | Resides in Container, but we don't use it directly as communication between containers. Bound for each service by selector logic of API server. You can confirm it "kubectl get endpoints" |
 | NodePort | NodePorted Service | 192.168.122.183:30001, etc | between HAProxy and Master/Workers | Web access to k8s cluster thru HAProxy |
