@@ -65,7 +65,7 @@ https://www.youtube.com/watch?v=y2bhV81MfKQ
 <Example>
 
 - Access from Employee to mongoDB
-  1) According to My program's (employee.yaml), one of expected routings is src: employee-test(woker2), dst: mongo-srv.
+  1) According to My web-app and its employee.yaml, one of expected routings is src: employee-test(woker2), dst: mongo-srv.
   2) The request goes up to mongo-srv which plays as role of iptable. He rewrites the dst from mongo-srv (10.105.113.220:8080) to mongo-test (192.168.235.130:80)
   3) The request goes down mongo-test located in worker1. (src: employee-test(worker2), dst: mongo-test(worker1)).
   4) MongoDB makes the response as src: mongo-test(worker1), dst: employee-test(worker2).
