@@ -80,7 +80,31 @@ https://www.youtube.com/watch?v=y2bhV81MfKQ
 $ git clone https://github.com/developer-onizuka/kubernetes.git
 ```
 
-# 2. Create a storage class, PV and PVC for mongoDB
+# 2. Create NFS volume for PV
+https://hawksnowlog.blogspot.com/2019/07/run-nfs-server-on-docker.html
+
+```
+nfsserver:~$ sudo docker pull itsthenetwork/nfs-server-alpine
+nfsserver:~$ mkdir -p /home/vagrant/shared
+nfsserver:~$ sudo docker run -itd --name nfs --rm --privileged -p 2049:2049 -v /home/vagrant/shared:/data -e SHARED_DIRECTORY=/data itsthenetwork/nfs-server-alpine:latest
+
+master:~$ sudo apt-get -y install nfs-client
+worker1:~$ sudo apt-get -y install nfs-client
+worker2:~$ sudo apt-get -y install nfs-client
+
+master:~$ sudo mount -v 192.168.33.11:/ /mnt
+worker1:~$ sudo mount -v 192.168.33.11:/ /mnt
+worker2:~$ sudo mount -v 192.168.33.11:/ /mnt
+mount.nfs: timeout set for Sat Oct  9 07:04:32 2021
+mount.nfs: trying text-based options 'vers=4.2,addr=192.168.33.11,clientaddr=192.168.33.101'
+
+master:~$ mount |grep nfs
+worker1:~$ mount |grep nfs
+worker2:~$ mount |grep nfs
+192.168.33.11:/ on /mnt type nfs4 (rw,relatime,vers=4.2,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=192.168.33.101,local_lock=none,addr=192.168.33.11)
+```
+
+# 3. Create a storage class, PV and PVC for mongoDB
 ```
 $ kubectl apply -f sc.yaml 
 storageclass.storage.k8s.io/local-storage created
@@ -102,7 +126,7 @@ NAME       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM            
 mongo-pv   1Gi        RWO            Retain           Bound    default/mongo-pvc   local-storage            11s
 ```
 
-# 3. Create deployment of mongoDB
+# 4. Create deployment of mongoDB
 ```
 $ kubectl apply -f mongo.yaml 
 service/mongo-test created
@@ -170,7 +194,7 @@ Events:
   Normal  Started    10m   kubelet            Started container mongodb
 ```
 
-# 4. Check if mongoDB is running properly
+# 5. Check if mongoDB is running properly
 ```
 $ cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -224,7 +248,7 @@ $ kubectl exec -it curl -- curl http://mongo-srv:27017
 It looks like you are trying to access MongoDB over HTTP on the native driver port.
 ```
 
-# 5. Create deployment of "Employee Web app" with 4 repricas
+# 6. Create deployment of "Employee Web app" with 4 repricas
 ```
 $ kubectl apply -f employee.yaml 
 service/employee-test created
@@ -237,7 +261,7 @@ Node:         worker1/192.168.122.18
 Node:         worker1/192.168.122.18
 ```
 
-# 6. Check if Employee web app is running properly
+# 7. Check if Employee web app is running properly
 ```
 $ kubectl exec -it curl -- curl https://employee-test:5001 -k
 <!DOCTYPE html>
@@ -257,7 +281,7 @@ $ kubectl exec -it curl -- curl https://employee-test:5001 -k
 </html>
 ```
 
-# 7. Create Nginx's config files and Configmap
+# 8. Create Nginx's config files and Configmap
 ```
 $ cat <<EOF > default.conf
 upstream proxy.com {
@@ -278,7 +302,7 @@ EOF
 $ kubectl create configmap nginx-config --from-file=default.conf
 configmap/nginx-config created
 ```
-# 8. Create depolyment of Nginx with 2 repricas
+# 9. Create depolyment of Nginx with 2 repricas
 ```
 $ kubectl apply -f nginx-nodeport.yaml 
 
@@ -306,7 +330,7 @@ External Traffic Policy:  Cluster
 Events:                   <none>
 ```
 
-# 9. Check each IP
+# 10. Check each IP
 
 | | Resides at | IP address | Connection | Purpose |
 | --- | --- | --- | --- | --- |
@@ -316,7 +340,7 @@ Events:                   <none>
 | Endpoint | Each Container | 192.168.189.97:80, etc | between Service and Containers | Resides in Container, but we don't use it directly as communication between containers. Bound for each service by selector logic of API server. You can confirm it "kubectl get endpoints" |
 | NodePort | NodePorted Service | 192.168.122.183:30001, etc | between HAProxy and Master/Workers | Web access to k8s cluster thru HAProxy |
 
-# 9-1. Internal IP address
+# 10-1. Internal IP address
 ```
 $ kubectl describe nodes| grep -e Hostname -e InternalIP
   InternalIP:  192.168.122.183
@@ -326,7 +350,7 @@ $ kubectl describe nodes| grep -e Hostname -e InternalIP
   InternalIP:  192.168.122.219
   Hostname:    worker2
 ```
-# 9-2. Cluster IP and Port
+# 10-2. Cluster IP and Port
 ```
 $ kubectl get services
 NAME           TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
@@ -362,7 +386,7 @@ $ kubectl exec -it curl -- curl nginx-srv:8080
 </html>
 ```
 
-# 9-3. Container IP
+# 10-3. Container IP
 ```
 $ kubectl get pods --output=wide
 NAME                            READY   STATUS    RESTARTS        AGE   IP                NODE      NOMINATED NODE   READINESS GATES
@@ -376,7 +400,7 @@ nginx-test-85c6647877-bsfw7     1/1     Running   0               76s   192.168.
 nginx-test-85c6647877-z52x6     1/1     Running   0               76s   192.168.235.130   worker1   <none>           <none>
 ```
 
-# 9-4. Endpoint of service ( = Container's IP address + each port(80, 5001, 27017 or 8080))
+# 10-4. Endpoint of service ( = Container's IP address + each port(80, 5001, 27017 or 8080))
 ```
 $ kubectl describe services nginx-srv | grep Endpoint
 Endpoints:                192.168.189.97:80,192.168.235.130:80
@@ -413,7 +437,7 @@ mongo-srv      192.168.235.189:27017                                            
 nginx-srv      192.168.189.97:80,192.168.235.130:80                                        38m
 ```
 
-# 9-5. NodePort ( = Internal IP address + 30001)
+# 10-5. NodePort ( = Internal IP address + 30001)
 
 192.168.122.183:30001 --> 
 https://github.com/developer-onizuka/kubernetes/blob/main/Screenshot%20from%202021-09-21%2009-51-21.png
@@ -432,7 +456,7 @@ mongo-srv      ClusterIP   10.105.113.220   <none>        27017/TCP           39
 nginx-srv      NodePort    10.105.235.123   <none>        8080:30001/TCP      39m
 ```
 
-# 10. Expose Proxy address for outside world using HAproxy on Host Machine
+# 11. Expose Proxy address for outside world using HAproxy on Host Machine
 Docker.io should be installed on Host Machine, prior to this step.
 
 The following picture is taken on my smart phone involved in same network as Host Machine (192.168.11.xx).
@@ -457,40 +481,6 @@ listen http-in
     server proxy-server3 192.168.122.219:30001
 EOF
 $ sudo docker run -itd --rm --name haproxy -p 80:80 -v $(pwd)/haproxy-nodeport.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro haproxy:1.8
-```
-
-# 11. Create NFS volume for PV
-https://hawksnowlog.blogspot.com/2019/07/run-nfs-server-on-docker.html
-
-```
-vagrant@nfsserver:~$ sudo docker images
-REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
-
-vagrant@nfsserver:~$ sudo docker pull itsthenetwork/nfs-server-alpine
-
-vagrant@nfsserver:~$ pwd
-/home/vagrant
-
-vagrant@nfsserver:~$ mkdir shared
-
-vagrant@nfsserver:~$ ls
-shared
-
-vagrant@nfsserver:~$ sudo docker run -itd --name nfs --rm --privileged -p 2049:2049 -v /home/vagrant/shared:/data -e SHARED_DIRECTORY=/data itsthenetwork/nfs-server-alpine:latest
-
-vagrant@nfsserver:~$ sudo docker ps
-CONTAINER ID   IMAGE                                    COMMAND              CREATED          STATUS          PORTS     NAMES
-61727cc65b75   itsthenetwork/nfs-server-alpine:latest   "/usr/bin/nfsd.sh"   11 seconds ago   Up 11 seconds             nfs
-
-
-vagrant@worker1:~$ sudo apt-get -y install nfs-client
-
-vagrant@worker1:~$ sudo mount -v 192.168.33.11:/ /mnt
-mount.nfs: timeout set for Sat Oct  9 07:04:32 2021
-mount.nfs: trying text-based options 'vers=4.2,addr=192.168.33.11,clientaddr=192.168.33.101'
-
-vagrant@worker1:~$ mount |grep nfs
-192.168.33.11:/ on /mnt type nfs4 (rw,relatime,vers=4.2,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=192.168.33.101,local_lock=none,addr=192.168.33.11)
 ```
 
 # 12. Dash board
