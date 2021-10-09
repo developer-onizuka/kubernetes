@@ -483,7 +483,7 @@ CONTAINER ID   IMAGE                                    COMMAND              CRE
 61727cc65b75   itsthenetwork/nfs-server-alpine:latest   "/usr/bin/nfsd.sh"   11 seconds ago   Up 11 seconds             nfs
 
 
-vagrant@worker1:~$ sudo apt -y install nfs-client
+vagrant@worker1:~$ sudo apt-get -y install nfs-client
 
 vagrant@worker1:~$ sudo mount -v 192.168.33.11:/ /mnt
 mount.nfs: timeout set for Sat Oct  9 07:04:32 2021
