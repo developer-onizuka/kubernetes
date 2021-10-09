@@ -458,7 +458,40 @@ EOF
 $ sudo docker run -itd --rm --name haproxy -p 80:80 -v $(pwd)/haproxy-nodeport.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro haproxy:1.8
 ```
 
-# 11. Dash board
+# 11. Create NFS volume for PV
+https://hawksnowlog.blogspot.com/2019/07/run-nfs-server-on-docker.html
+
+```
+vagrant@haproxy:~$ sudo docker images
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+
+vagrant@haproxy:~$ sudo docker pull itsthenetwork/nfs-server-alpine
+
+vagrant@haproxy:~$ pwd
+/home/vagrant
+
+vagrant@haproxy:~$ mkdir shared
+vagrant@haproxy:~$ ls
+shared
+
+vagrant@haproxy:~$ sudo docker run -itd --name nfs --rm --privileged -p 2049:2049 -v /home/vagrant/shared:/data -e SHARED_DIRECTORY=/data itsthenetwork/nfs-server-alpine:latest
+
+vagrant@haproxy:~$ sudo docker ps
+CONTAINER ID   IMAGE                                    COMMAND              CREATED          STATUS          PORTS     NAMES
+61727cc65b75   itsthenetwork/nfs-server-alpine:latest   "/usr/bin/nfsd.sh"   11 seconds ago   Up 11 seconds             nfs
+
+
+vagrant@worker1:~$ sudo apt -y install nfs-client
+
+vagrant@worker1:~$ sudo mount -v 192.168.33.10:/ /mnt
+mount.nfs: timeout set for Sat Oct  9 07:04:32 2021
+mount.nfs: trying text-based options 'vers=4.2,addr=192.168.33.10,clientaddr=192.168.33.101'
+
+vagrant@worker1:~$ mount |grep nfs
+192.168.33.10:/ on /mnt type nfs4 (rw,relatime,vers=4.2,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=192.168.33.101,local_lock=none,addr=192.168.33.10)
+```
+
+# 12. Dash board
 ```
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
 $ kubectl proxy
