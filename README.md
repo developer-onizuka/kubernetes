@@ -16,6 +16,7 @@ https://github.com/developer-onizuka/kubernetes_vagrant
 | Nginx | 2 | resolved DNS | See #10 | Ephemeral | N/A |
 | Employee Web App | 4 | resolved DNS | no | Ephemeral | N/A |
 | mongoDB | 1 | resolved DNS | no | Persistent | N/A |
+| NFS server | N/A | N/A | N/A | N/A | N/A | 
 
 ```
 Type=NodePort
@@ -462,33 +463,34 @@ $ sudo docker run -itd --rm --name haproxy -p 80:80 -v $(pwd)/haproxy-nodeport.c
 https://hawksnowlog.blogspot.com/2019/07/run-nfs-server-on-docker.html
 
 ```
-vagrant@haproxy:~$ sudo docker images
+vagrant@nfsserver:~$ sudo docker images
 REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
 
-vagrant@haproxy:~$ sudo docker pull itsthenetwork/nfs-server-alpine
+vagrant@nfsserver:~$ sudo docker pull itsthenetwork/nfs-server-alpine
 
-vagrant@haproxy:~$ pwd
+vagrant@nfsserver:~$ pwd
 /home/vagrant
 
-vagrant@haproxy:~$ mkdir shared
-vagrant@haproxy:~$ ls
+vagrant@nfsserver:~$ mkdir shared
+
+vagrant@nfsserver:~$ ls
 shared
 
-vagrant@haproxy:~$ sudo docker run -itd --name nfs --rm --privileged -p 2049:2049 -v /home/vagrant/shared:/data -e SHARED_DIRECTORY=/data itsthenetwork/nfs-server-alpine:latest
+vagrant@nfsserver:~$ sudo docker run -itd --name nfs --rm --privileged -p 2049:2049 -v /home/vagrant/shared:/data -e SHARED_DIRECTORY=/data itsthenetwork/nfs-server-alpine:latest
 
-vagrant@haproxy:~$ sudo docker ps
+vagrant@nfsserver:~$ sudo docker ps
 CONTAINER ID   IMAGE                                    COMMAND              CREATED          STATUS          PORTS     NAMES
 61727cc65b75   itsthenetwork/nfs-server-alpine:latest   "/usr/bin/nfsd.sh"   11 seconds ago   Up 11 seconds             nfs
 
 
 vagrant@worker1:~$ sudo apt -y install nfs-client
 
-vagrant@worker1:~$ sudo mount -v 192.168.33.10:/ /mnt
+vagrant@worker1:~$ sudo mount -v 192.168.33.11:/ /mnt
 mount.nfs: timeout set for Sat Oct  9 07:04:32 2021
-mount.nfs: trying text-based options 'vers=4.2,addr=192.168.33.10,clientaddr=192.168.33.101'
+mount.nfs: trying text-based options 'vers=4.2,addr=192.168.33.11,clientaddr=192.168.33.101'
 
 vagrant@worker1:~$ mount |grep nfs
-192.168.33.10:/ on /mnt type nfs4 (rw,relatime,vers=4.2,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=192.168.33.101,local_lock=none,addr=192.168.33.10)
+192.168.33.11:/ on /mnt type nfs4 (rw,relatime,vers=4.2,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=192.168.33.101,local_lock=none,addr=192.168.33.11)
 ```
 
 # 12. Dash board
