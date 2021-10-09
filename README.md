@@ -13,10 +13,10 @@ https://github.com/developer-onizuka/kubernetes_vagrant
 |  | Replicas | ClusterIP | ExternalIP | Storage | How to access from outside |
 | --- | --- | --- | --- | --- | --- |
 | HAProxy | N/A | N/A | N/A | N/A | Blowse Host's IP address | 
+| NFS server | N/A | N/A | N/A | N/A | N/A | 
 | Nginx | 2 | resolved DNS | See #10 | Ephemeral | N/A |
 | Employee Web App | 4 | resolved DNS | no | Ephemeral | N/A |
 | mongoDB | 1 | resolved DNS | no | Persistent | N/A |
-| NFS server | N/A | N/A | N/A | N/A | N/A | 
 
 ```
 Type=NodePort
