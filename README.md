@@ -80,7 +80,7 @@ https://www.youtube.com/watch?v=y2bhV81MfKQ
 $ git clone https://github.com/developer-onizuka/kubernetes.git
 ```
 
-# 2. Create NFS volume for PV
+# 2. Create NFS volume for sharing data among the cluster
 https://hawksnowlog.blogspot.com/2019/07/run-nfs-server-on-docker.html
 
 ```
@@ -92,16 +92,16 @@ master:~$ sudo apt-get -y install nfs-client
 worker1:~$ sudo apt-get -y install nfs-client
 worker2:~$ sudo apt-get -y install nfs-client
 
-master:~$ sudo mount -v 192.168.33.11:/ /mnt
-worker1:~$ sudo mount -v 192.168.33.11:/ /mnt
-worker2:~$ sudo mount -v 192.168.33.11:/ /mnt
+master:~$ sudo mount -v <nfsserver's ip>:/ /mnt
+worker1:~$ sudo mount -v <nfsserver's ip>:/ /mnt
+worker2:~$ sudo mount -v <nfsserver's ip>:/ /mnt
 mount.nfs: timeout set for Sat Oct  9 07:04:32 2021
-mount.nfs: trying text-based options 'vers=4.2,addr=192.168.33.11,clientaddr=192.168.33.101'
+mount.nfs: trying text-based options 'vers=4.2,addr=192.168.xx.xxx,clientaddr=192.168.xx.xxx'
 
 master:~$ mount |grep nfs
 worker1:~$ mount |grep nfs
 worker2:~$ mount |grep nfs
-192.168.33.11:/ on /mnt type nfs4 (rw,relatime,vers=4.2,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=192.168.33.101,local_lock=none,addr=192.168.33.11)
+192.168.xx.xxx:/ on /mnt type nfs4 (rw,relatime,vers=4.2,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=192.168.xx.xxx,local_lock=none,addr=192.168.xx.xxx)
 ```
 
 # 3. Create a storage class, PV and PVC for mongoDB
