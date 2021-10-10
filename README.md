@@ -132,6 +132,8 @@ $ kubectl apply -f mongo.yaml
 service/mongo-test created
 deployment.apps/mongo-test created
 
+$ watch -x sudo kubectl get pods
+
 $ kubectl describe pods mongo-test
 Name:         mongo-test-67f5dd84b7-j5l6s
 Namespace:    default
@@ -254,6 +256,8 @@ $ kubectl apply -f employee.yaml
 service/employee-test created
 deployment.apps/employee-test created
 
+$ watch -x sudo kubectl get pods
+
 $ kubectl describe pod employee-test |grep ^Node:
 Node:         worker1/192.168.122.18
 Node:         worker2/192.168.122.219
@@ -305,6 +309,8 @@ configmap/nginx-config created
 # 9. Create depolyment of Nginx with 2 repricas
 ```
 $ kubectl apply -f nginx-nodeport.yaml 
+
+$ watch -x sudo kubectl get pods
 
 $ kubectl describe pod nginx-test |grep ^Node:
 Node:         worker2/192.168.122.219
