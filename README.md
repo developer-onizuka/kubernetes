@@ -75,7 +75,7 @@ https://www.youtube.com/watch?v=y2bhV81MfKQ
   7) The response (src: mongo-srv, dst: employee-test(worker2)) arrives at employee-test in worker2.
 ```
 
-# 1. git clone this project
+# 1. git clone this repository
 ```
 $ git clone https://github.com/developer-onizuka/kubernetes.git
 ```
