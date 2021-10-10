@@ -127,6 +127,7 @@ mongo-pv   1Gi        RWO            Retain           Bound    default/mongo-pvc
 ```
 
 # 4. Create deployment of mongoDB
+If you're gonna run mongoDB with ReplicaSet, then See https://github.com/developer-onizuka/kubernetes_with_mongoDB_ReplicaSet/
 ```
 $ kubectl apply -f mongo.yaml 
 service/mongo-test created
