@@ -34,11 +34,10 @@ spec:
     spec:
       containers:
       - name: employee
-        image: developeronizuka/employee
+        image: developeronizuka/employee:1.0.0
         ports:
         - containerPort: 5001
         - containerPort: 5000
         env:
         - name: MONGO
           value: mongo-srv
-        command: ["/usr/local/dotnet/publish/Employee"]
