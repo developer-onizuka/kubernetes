@@ -199,7 +199,7 @@ Events:
 
 # 5. Check if mongoDB is running properly
 ```
-$ cat <<EOF | kubectl apply -f -
+$ cat <<EOF | sudo kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
@@ -231,7 +231,7 @@ Address:	10.96.0.10#53
 command terminated with exit code 1
 ```
 ```
-$ cat <<EOF | kubectl apply -f -
+$ cat <<EOF | sudo kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
