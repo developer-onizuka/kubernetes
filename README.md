@@ -268,7 +268,7 @@ Node:         worker1/192.168.122.18
 
 # 7. Check if Employee web app is running properly
 ```
-$ kubectl exec -it curl -- curl https://employee-test:5001 -k
+$ kubectl exec -it curl -- curl https://employee-srv:5001 -k
 <!DOCTYPE html>
 <html lang="en">
 <head>
