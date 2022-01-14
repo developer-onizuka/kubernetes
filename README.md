@@ -341,7 +341,7 @@ Events:                   <none>
 
 | | Resides at | IP address | Connection | Purpose |
 | --- | --- | --- | --- | --- |
-| Internal IP | Each Master/Worker | 192.168.122.183, etc | between Host Machine and Master/workers | IP address of the node accessible only from within the cluster. Kubelet manages InternalIP as like "KUBELET_EXTRA_ARGS=--node-ip=192.168.33.100" in /etc/default/kubelet.|
+| Internal IP | Each Master/Worker | 192.168.122.183, etc | between Host Machine and Master/workers | IP address of the node accessible only from within the cluster. Kubelet manages Internal IP as like "KUBELET_EXTRA_ARGS=--node-ip=192.168.33.100" in /etc/default/kubelet.|
 | Cluster IP and Port| Each Service | 10.105.235.123:8080, etc | between Container and Service | Resolved by kube-dns(10.96.0.10) and communication between Pods inside the Cluster |
 | Container IP | Each Container | 192.168.189.97, etc | between Host Machine and container | Human operations, but we don't use it directly. Should use the command "kubectl exec -it podname -- /bin/bash". The podname is resolved to Container IP thru kubectl. |
 | Endpoint | Each Container | 192.168.189.97:80, etc | between Service and Containers | Resides in Container, but we don't use it directly as communication between containers. Bound for each service by selector logic of API server. You can confirm it "kubectl get endpoints" |
